@@ -36,16 +36,18 @@ processar() {
   unzip -p "$zip" "$csv" | awk -F';' '
     NR == 1 {
       for (i = 1; i <= NF; i++) { c = $i; gsub(/["\r]/, "", c); ix[c] = i }
-      split("NM_MUNICIPIO NR_ZONA NR_SECAO NR_LOCAL_VOTACAO QT_APTOS QT_COMPARECIMENTO QT_ABSTENCOES NM_VOTAVEL QT_VOTOS", cols, " ")
-      for (k = 1; k <= 9; k++) if (!(cols[k] in ix)) { print "coluna ausente: " cols[k] > "/dev/stderr"; exit 2 }
+      n = split("NM_MUNICIPIO NR_ZONA NR_SECAO NR_LOCAL_VOTACAO QT_APTOS QT_COMPARECIMENTO QT_ABSTENCOES NM_VOTAVEL QT_VOTOS QT_ELEI_BIOM_SEM_HABILITACAO DT_ENCERRAMENTO", cols, " ")
+      for (k = 1; k <= n; k++) if (!(cols[k] in ix)) { print "coluna ausente: " cols[k] > "/dev/stderr"; exit 2 }
       cargo = ix["DS_CARGO_PERGUNTA"]
-      print "NM_MUNICIPIO;NR_ZONA;NR_SECAO;NR_LOCAL_VOTACAO;QT_APTOS;QT_COMPARECIMENTO;QT_ABSTENCOES;NM_VOTAVEL;QT_VOTOS\r"
+      o = cols[1]
+      for (k = 2; k <= n; k++) o = o ";" cols[k]
+      print o "\r"
       next
     }
     index($0, "\"Presidente\"") == 0 { next }
     $cargo == "\"Presidente\"" {
       o = $ix[cols[1]]
-      for (k = 2; k <= 9; k++) o = o ";" $ix[cols[k]]
+      for (k = 2; k <= n; k++) o = o ";" $ix[cols[k]]
       gsub(/["\r]/, "", o)
       print o "\r"
     }' > "$out.parcial"

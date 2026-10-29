@@ -92,6 +92,14 @@
   .eq::after { content: "= (0)"; color: var(--color-fg-muted); }
   .inv.up::after { color: var(--color-bad); }
   .inv.down::after { color: var(--color-ok); }
+  .ar-table td.v-up { color: var(--color-ok); }
+  .ar-table td.v-down { color: var(--color-bad); }
+  .ar-table td.v-eq { color: var(--color-fg-muted); }
+  .ar-table td.v-inv.v-up { color: var(--color-bad); }
+  .ar-table td.v-inv.v-down { color: var(--color-ok); }
+  .ar-table td.v-up::before { content: "▲ "; font-size: .8em; }
+  .ar-table td.v-down::before { content: "▼ "; font-size: .8em; }
+  .ar-table td.v-eq::before { content: "= "; font-size: .8em; }
   .ar-more { justify-self: start; font: inherit; color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--radius); padding: var(--pad-xs) var(--pad-sm); cursor: pointer; }
   button:focus-visible, select:focus-visible, input:focus-visible, td.link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
   .ar-loader { display: flex; align-items: center; justify-content: center; gap: var(--gap-md); min-height: 14rem; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--radius); color: var(--color-fg-muted); }
@@ -101,6 +109,10 @@
   @keyframes girar { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .ar-loader .spin { animation-duration: 2.4s; } }
   .erro { color: var(--color-bad); }
+  :is(#filtro-corte, #filtro-voto):has(option:checked:not([value=""])) { border-color: var(--color-accent); color: var(--color-accent); }
+  .ar-table td.tarde { color: var(--color-bad); font-weight: 600; }
+  .ar-table td.no-filtro { color: var(--color-accent); font-weight: 600; }
+  .filtro-ativo { color: var(--color-accent); font-weight: 550; }
 </style>
 </head>
 <body>
@@ -125,15 +137,19 @@
     <div class="tile"><h2>Aptos a votar</h2><dl><dt>1º turno</dt><dd data-f="aptos_1t">—</dd><dt>2º turno</dt><dd data-f="aptos_2t">—</dd></dl></div>
     <div class="tile"><h2>Comparecimento</h2><dl><dt>1º turno</dt><dd data-f="comp_1t">—</dd><dt>2º turno</dt><dd data-f="comp_2t">—</dd></dl></div>
     <div class="tile"><h2>Abstenções</h2><dl><dt>1º turno</dt><dd data-f="abst_1t">—</dd><dt>2º turno</dt><dd data-f="abst_2t">—</dd></dl></div>
+    <div class="tile"><h2>Biometria inválida</h2><dl><dt>1º turno</dt><dd data-f="biom_1t">—</dd><dt>2º turno</dt><dd data-f="biom_2t">—</dd></dl></div>
   </section>
 
   <section class="ar-card" id="tabela-card" hidden>
     <h2 id="tabela-titulo">Votos por UF</h2>
-    <p class="note">Em cada candidato ou opção, 1T é o 1º turno e 2T o 2º turno. A seta mostra se o número subiu (▲) ou caiu (▼) do 1º para o 2º turno, com a variação entre parênteses. Em abstenções, alta aparece em vermelho. Clique num cabeçalho para ordenar e num nome para descer um nível.</p>
+    <p class="note">Em cada candidato ou opção, 1T é o 1º turno, 2T o 2º turno e Var. a variação do 1º para o 2º, com a seta de subida (▲) ou queda (▼). Em abstenções e biometria inválida, alta aparece em vermelho. Clique num cabeçalho para ordenar e num nome para descer um nível.</p>
+    <p class="note"><b>Biometria inválida</b> é o campo do TSE <code>QT_ELEI_BIOM_SEM_HABILITACAO</code>: eleitores com biometria cadastrada que não foram habilitados por ela. O filtro <b>Urnas encerradas no 2º turno</b> usa a hora de encerramento da votação na urna (<code>DT_ENCERRAMENTO</code>), convertida para a hora de Brasília (no exterior, hora local), e mostra só as seções encerradas antes ou a partir das 17h20, ou antes ou a partir das 19h. "Antes" vai até um segundo antes do horário (por exemplo, 18:59:59). O filtro <b>Votação no 2º turno</b> mostra só as seções em que um dos candidatos teve mais de 80% do total de votos da seção (comparecimento, com brancos e nulos). Os dois filtros podem ser combinados, e com qualquer um escolhido todos os totais e a comparação entre os turnos consideram só essas seções. Para Lula e Flávio, <b>% 1T</b> e <b>% 2T</b> são os votos do candidato divididos pelo comparecimento do turno, e <b>Var. p.p.</b> é a diferença em pontos percentuais.</p>
     <div class="ar-tools">
       <label>UF<select id="sel-uf"><option value="">Brasil (por UF)</option></select></label>
       <label>Município<select id="sel-mun" disabled><option value="">Escolha uma UF</option></select></label>
       <label>Filtrar<input id="busca" type="search" placeholder="Nome da UF"></label>
+      <label>Urnas encerradas no 2º turno<select id="filtro-corte"><option value="">Todas</option></select></label>
+      <label>Votação no 2º turno<select id="filtro-voto"><option value="">Todas</option></select></label>
     </div>
     <section class="ar-loader" id="loader-uf" role="status" aria-live="polite" hidden>
       <span class="spin" aria-hidden="true"></span>
@@ -153,7 +169,7 @@
   const fmtVar = (v) => (v > 0 ? '+' : '') + fmtN(v);
   const nomeUF = (uf) => UFS[uf] || uf;
   const depois = (fn) => setTimeout(fn, 40);
-  const st = {uf: '', mun: '', sort: null, dir: 1, busca: '', limite: PASSO};
+  const st = {uf: '', mun: '', sort: null, dir: 1, busca: '', limite: PASSO, fEnc: '', fVoto: ''};
   let D = null;
   const secoesUF = {};
 
@@ -165,12 +181,30 @@
     document.body.appendChild(s);
   });
 
-  // Totais do país e colunas: candidatos dos dois turnos (pelo 2º), Branco, Nulo, só 1º turno
+  // Soma agregados compactos {s, t1, t2, v1, v2} (listas alinhadas; null quando o turno não existe)
+  function juntar(lista) {
+    const out = {s: 0, t1: null, t2: null, v1: null, v2: null};
+    for (const a of lista) {
+      out.s += a.s;
+      for (const k of ['t1', 't2', 'v1', 'v2']) {
+        if (!a[k]) continue;
+        if (!out[k]) out[k] = a[k].slice();
+        else a[k].forEach((x, i) => { out[k][i] += x; });
+      }
+    }
+    return out;
+  }
+
+  // Totais do país e colunas: candidatos dos dois turnos (pelo 2º), Branco, Nulo, só 1º turno.
+  // Cada município traz os totais por classe de seção ('cl'): a chave junta a faixa de
+  // encerramento no 2º turno e a faixa de votação no 2º turno (veja gerar_dados.py).
   function montarBrasil(B) {
+    for (const u of B.ufs) for (const m of u.mun) m.todas = juntar(Object.values(m.cl));
     const tot1 = {}, tot2 = {};
     for (const u of B.ufs) for (const m of u.mun) {
-      if (m.v1) m.v1.forEach((v, i) => { tot1[B.c1[i]] = (tot1[B.c1[i]] || 0) + v; });
-      if (m.v2) m.v2.forEach((v, i) => { tot2[B.c2[i]] = (tot2[B.c2[i]] || 0) + v; });
+      const a = m.todas;
+      if (a.v1) a.v1.forEach((v, i) => { tot1[B.c1[i]] = (tot1[B.c1[i]] || 0) + v; });
+      if (a.v2) a.v2.forEach((v, i) => { tot2[B.c2[i]] = (tot2[B.c2[i]] || 0) + v; });
     }
     const fim = (k) => (k === 'Branco' ? 1 : k === 'Nulo' ? 2 : k in tot2 ? 0 : 3);
     const nomes = [...new Set([...B.c1, ...B.c2])]
@@ -180,6 +214,7 @@
       {rot: 'Aptos', cols: ['aptos_1t', 'aptos_2t']},
       {rot: 'Comparecimento', cols: ['comp_1t', 'comp_2t']},
       {rot: 'Abstenções', cols: ['abst_1t', 'abst_2t'], inv: true},
+      {rot: 'Biometria inválida', cols: ['biom_1t', 'biom_2t'], inv: true},
     ];
     for (const g of grupos) numCols.push(...g.cols);
     for (const n of nomes) {
@@ -187,35 +222,75 @@
       if (n in tot1) cols.push(n + ' (1T)');
       if (n in tot2) cols.push(n + ' (2T)');
       numCols.push(...cols);
-      grupos.push({rot: n, cols});
+      const g = {rot: n, cols};
+      // Finalistas do 2º turno ganham % do total de votos (comparecimento) em cada turno e a variação em p.p.
+      if (B.finalistas.includes(n) && cols.length === 2) g.pct = {c1: n + ' (%1T)', c2: n + ' (%2T)', var: n + ' (var p.p.)', n1: cols[0], n2: cols[1]};
+      grupos.push(g);
     }
+    // Grupos com os dois turnos ganham uma coluna de variação (2T − 1T), que também ordena
+    for (const g of grupos) if (g.cols.length === 2) g.var = g.cols[0].replace(/_1t$| \(1T\)$/, (s) => (s === '_1t' ? '_var' : ' (var)'));
+    const comVariacao = (r) => {
+      for (const g of grupos) {
+        if (g.var) r[g.var] = r[g.cols[0]] != null && r[g.cols[1]] != null ? r[g.cols[1]] - r[g.cols[0]] : null;
+        if (g.pct) {
+          const p1 = r[g.pct.n1] != null && r.comp_1t > 0 ? 100 * r[g.pct.n1] / r.comp_1t : null;
+          const p2 = r[g.pct.n2] != null && r.comp_2t > 0 ? 100 * r[g.pct.n2] / r.comp_2t : null;
+          r[g.pct.c1] = p1; r[g.pct.c2] = p2;
+          r[g.pct.var] = p1 != null && p2 != null ? p2 - p1 : null;
+        }
+      }
+      return r;
+    };
     const comTurnos = (r, t1, t2, v1, v2, c1, c2) => {
-      ['aptos', 'comp', 'abst'].forEach((k, i) => { r[k + '_1t'] = t1 ? t1[i] : null; r[k + '_2t'] = t2 ? t2[i] : null; });
+      ['aptos', 'comp', 'abst', 'biom'].forEach((k, i) => { r[k + '_1t'] = t1 ? t1[i] : null; r[k + '_2t'] = t2 ? t2[i] : null; });
       for (const n of nomes) {
         if (n in tot1) r[n + ' (1T)'] = v1 ? v1[c1.get(n)] || 0 : null;
         if (n in tot2) r[n + ' (2T)'] = v2 ? v2[c2.get(n)] || 0 : null;
       }
-      return r;
+      return comVariacao(r);
     };
     const somar = (rows, base) => {
       const t = Object.assign({secoes: rows.reduce((s, r) => s + r.secoes, 0)}, base);
       for (const c of numCols) t[c] = rows.some((r) => r[c] != null) ? rows.reduce((s, r) => s + (r[c] || 0), 0) : null;
-      return t;
+      return comVariacao(t);
     };
     const ix1 = new Map(B.c1.map((n, i) => [n, i])), ix2 = new Map(B.c2.map((n, i) => [n, i]));
-    const munsPorUF = new Map(), ufRows = [];
-    for (const u of B.ufs) {
-      const rows = u.mun.map((m) => comTurnos({uf: u.uf, nome: m.nome, secoes: m.secoes}, m.t1, m.t2, m.v1, m.v2, ix1, ix2))
-        .sort((x, y) => x.nome.localeCompare(y.nome, 'pt-BR'));
-      munsPorUF.set(u.uf, rows);
-      ufRows.push(somar(rows, {uf: u.uf, nome: nomeUF(u.uf), municipios: rows.length}));
-    }
-    ufRows.sort((x, y) => (x.uf === 'ZZ') - (y.uf === 'ZZ') || x.nome.localeCompare(y.nome, 'pt-BR'));
-    return {grupos, numCols, comTurnos, somar, munsPorUF, ufRows, ufTotal: new Map(ufRows.map((r) => [r.uf, r])),
-      brasil: somar(ufRows, {nome: 'Total do Brasil', municipios: ufRows.reduce((s, r) => s + r.municipios, 0)})};
+    const variante = (pegar) => {
+      const munsPorUF = new Map(), ufRows = [];
+      for (const u of B.ufs) {
+        const rows = [];
+        for (const m of u.mun) {
+          const a = pegar(m);
+          if (a) rows.push(comTurnos({uf: u.uf, nome: m.nome, secoes: a.s}, a.t1, a.t2, a.v1, a.v2, ix1, ix2));
+        }
+        rows.sort((x, y) => x.nome.localeCompare(y.nome, 'pt-BR'));
+        if (!rows.length) continue;
+        munsPorUF.set(u.uf, rows);
+        ufRows.push(somar(rows, {uf: u.uf, nome: nomeUF(u.uf), municipios: rows.length}));
+      }
+      ufRows.sort((x, y) => (x.uf === 'ZZ') - (y.uf === 'ZZ') || x.nome.localeCompare(y.nome, 'pt-BR'));
+      return {munsPorUF, ufRows, ufTotal: new Map(ufRows.map((r) => [r.uf, r])),
+        brasil: somar(ufRows, {nome: 'Total do Brasil', municipios: ufRows.reduce((s, r) => s + r.municipios, 0)})};
+    };
+    // Cada combinação de filtros soma as classes que atendem às duas faixas; é montada na primeira vez que é usada
+    const cache = new Map();
+    const filtrada = (fe, fv) => {
+      const chave = fe + '|' + fv;
+      if (!cache.has(chave)) {
+        const okE = fe === '' ? null : B.filtrosEnc[+fe][1], okV = fv === '' ? null : B.filtrosVoto[+fv][1];
+        cache.set(chave, variante((m) => {
+          const sel = Object.entries(m.cl).filter(([c]) => (!okE || okE.includes(+c[0])) && (!okV || okV.includes(+c[1]))).map(([, a]) => a);
+          return sel.length ? juntar(sel) : null;
+        }));
+      }
+      return cache.get(chave);
+    };
+    return {grupos, comTurnos, filtrosEnc: B.filtrosEnc, filtrosVoto: B.filtrosVoto, destaqueEnc: B.destaqueEnc,
+      todas: variante((m) => m.todas), filtrada};
   }
 
-  // Seções de uma UF a partir de dados/<UF>.js: [mun, zona, seção, local, aptos1, comp1, abst1, aptos2, comp2, abst2, votos 1T…, votos 2T…]
+  // Seções de uma UF a partir de dados/<UF>.js: [mun, zona, seção, local, aptos1, comp1, abst1, biom1,
+  // aptos2, comp2, abst2, biom2, encerramento 1T, encerramento 2T (Brasília), classe (faixa de encerramento × 4 + faixa de votação), votos 1T…, votos 2T…]
   function montarSecoes(uf) {
     if (secoesUF[uf]) return secoesUF[uf];
     const U = window.DADOS_UF[uf];
@@ -223,10 +298,11 @@
     const porMun = new Map();
     for (const s of U.s) {
       const nome = U.mun[s[0]];
-      const t1 = s[4] == null ? null : s.slice(4, 7), t2 = s[7] == null ? null : s.slice(7, 10);
-      const v1 = t1 ? s.slice(10, 10 + U.c1.length) : null;
-      const v2 = t2 ? s.slice(10 + U.c1.length) : null;
-      const r = D.comTurnos({uf, nome, zona: s[1], secao: s[2], local: s[3], secoes: 1}, t1, t2, v1, v2, c1, c2);
+      const t1 = s[4] == null ? null : s.slice(4, 8), t2 = s[8] == null ? null : s.slice(8, 12);
+      const v1 = t1 ? s.slice(15, 15 + U.c1.length) : null;
+      const v2 = t2 ? s.slice(15 + U.c1.length) : null;
+      const base = {uf, nome, zona: s[1], secao: s[2], local: s[3], enc_1t: s[12], enc_2t: s[13], fe: Math.floor(s[14] / 4), fv: s[14] % 4, secoes: 1};
+      const r = D.comTurnos(base, t1, t2, v1, v2, c1, c2);
       if (!porMun.has(nome)) porMun.set(nome, []);
       porMun.get(nome).push(r);
     }
@@ -245,12 +321,29 @@
   }
   const b = (txt) => Object.assign(document.createElement('b'), {textContent: txt});
 
+  // Agregados em uso: todas as seções ou só as dos filtros escolhidos (encerramento e votação)
+  const temFiltro = () => st.fEnc !== '' || st.fVoto !== '';
+  const V = () => (temFiltro() ? D.filtrada(st.fEnc, st.fVoto) : D.todas);
+  const passa = (r) => (st.fEnc === '' || D.filtrosEnc[+st.fEnc][1].includes(r.fe)) && (st.fVoto === '' || D.filtrosVoto[+st.fVoto][1].includes(r.fv));
+  // Rótulos vêm de dados/brasil.js, como 'antes das 17h20' e 'mais de 80% para LULA'
+  const descreverFiltro = () => [
+    st.fEnc !== '' ? 'urna encerrada no 2º turno ' + D.filtrosEnc[+st.fEnc][0] + ' (Brasília)' : null,
+    st.fVoto !== '' ? D.filtrosVoto[+st.fVoto][0] + ' no 2º turno' : null,
+  ].filter(Boolean).join(' e ');
+  const fmtPct = (v) => v.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%';
+  const fmtPP = (v) => (v > 0 ? '+' : '') + v.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' p.p.';
+  const classeVar = (v, inv) => 'var ' + (v > 0 ? 'v-up' : v < 0 ? 'v-down' : 'v-eq') + (inv ? ' v-inv' : '');
+
   function desenhar() {
     const modo = st.mun ? 'sec' : st.uf ? 'mun' : 'uf';
+    const v = V();
     let total, rows;
-    if (modo === 'uf') { total = D.brasil; rows = D.ufRows; }
-    else if (modo === 'mun') { total = D.ufTotal.get(st.uf); rows = D.munsPorUF.get(st.uf); }
-    else { total = D.munsPorUF.get(st.uf).find((r) => r.nome === st.mun); rows = secoesUF[st.uf].get(st.mun) || []; }
+    if (modo === 'uf') { total = v.brasil; rows = v.ufRows; }
+    else if (modo === 'mun') { total = v.ufTotal.get(st.uf); rows = v.munsPorUF.get(st.uf) || []; }
+    else {
+      total = (v.munsPorUF.get(st.uf) || []).find((r) => r.nome === st.mun);
+      rows = (secoesUF[st.uf].get(st.mun) || []).filter((r) => !temFiltro() || passa(r));
+    }
 
     // Trilha, título e resumo
     const trilha = $('trilha');
@@ -265,23 +358,33 @@
       trilha.appendChild(li);
     });
     $('titulo').textContent = modo === 'uf' ? 'Para onde foram os votos' : modo === 'mun' ? nomeUF(st.uf) : st.mun + (st.uf === 'ZZ' ? ' (exterior)' : ' (' + st.uf + ')');
+    const aviso = () => Object.assign(document.createElement('span'), {className: 'filtro-ativo',
+      textContent: ' Filtro ligado: só seções com ' + descreverFiltro() + '.'});
+    $('tabela-titulo').textContent = modo === 'uf' ? 'Votos por UF' : modo === 'mun' ? 'Votos por ' + (st.uf === 'ZZ' ? 'cidade' : 'município') + ' em ' + nomeUF(st.uf) : 'Votos por seção em ' + st.mun;
+    $('busca').placeholder = modo === 'uf' ? 'Nome ou sigla da UF' : modo === 'mun' ? 'Nome do município' : 'Zona, seção ou local';
+    const table = $('tabela');
+    table.className = 'ar-table ' + modo;
+    table.replaceChildren();
+
+    if (!total) {
+      $('resumo').replaceChildren('Nenhuma seção ' + (modo === 'mun' ? 'desta UF' : 'deste município') + ' atende ao filtro.', aviso());
+      document.querySelectorAll('#totais dd').forEach((dd) => { dd.textContent = '—'; seta(dd, null, null); });
+      $('mais').hidden = true;
+      return;
+    }
     const partes = ['Votos para presidente nos dois turnos de 2026: ', b(fmtN(total.secoes)), ' seções'];
     if (modo !== 'sec') partes.push(' em ', b(fmtN(modo === 'uf' ? total.municipios : rows.length)), st.uf === 'ZZ' ? ' cidades' : ' municípios');
     partes.push('. O comparecimento foi de ', b(fmtN(total.comp_1t ?? 0)), ' eleitores no 1º turno e ', b(fmtN(total.comp_2t ?? 0)), ' no 2º.');
+    if (temFiltro()) partes.push(aviso());
     $('resumo').replaceChildren(...partes);
 
     document.querySelectorAll('#totais dd').forEach((dd) => {
       const f = dd.dataset.f;
       dd.textContent = total[f] == null ? '—' : fmtN(total[f]);
       seta(dd, null, null);
-      if (f.endsWith('_2t')) seta(dd, total[f.replace('_2t', '_1t')], total[f], f.startsWith('abst'));
+      if (f.endsWith('_2t')) seta(dd, total[f.replace('_2t', '_1t')], total[f], f.startsWith('abst') || f.startsWith('biom'));
     });
-    $('tabela-titulo').textContent = modo === 'uf' ? 'Votos por UF' : modo === 'mun' ? 'Votos por ' + (st.uf === 'ZZ' ? 'cidade' : 'município') + ' em ' + nomeUF(st.uf) : 'Votos por seção em ' + st.mun;
-    $('busca').placeholder = modo === 'uf' ? 'Nome ou sigla da UF' : modo === 'mun' ? 'Nome do município' : 'Zona, seção ou local';
 
-    const table = $('tabela');
-    table.className = 'ar-table ' + modo;
-    table.replaceChildren();
     const thead = table.createTHead(), h1 = thead.insertRow(), h2 = thead.insertRow();
     const ordenavel = (th, campo, texto) => {
       th.classList.add('sort');
@@ -293,7 +396,8 @@
       });
     };
     const fixas = modo === 'sec'
-      ? [['zona', 'Zona', 'c0 txt', true], ['secao', 'Seção', 'c1 txt', true], ['local', 'Local', 'txt', true]]
+      ? [['zona', 'Zona', 'c0 txt', true], ['secao', 'Seção', 'c1 txt', true], ['local', 'Local', 'txt', true],
+        ['enc_1t', 'Encerr. 1T', 'txt', true], ['enc_2t', 'Encerr. 2T', 'txt', true]]
       : modo === 'mun'
         ? [['nome', st.uf === 'ZZ' ? 'Cidade' : 'Município', 'c0 txt', true], ['secoes', 'Seções', '', false]]
         : [['nome', 'UF', 'c0 txt', true], ['municipios', 'Municípios', '', false], ['secoes', 'Seções', '', false]];
@@ -304,13 +408,27 @@
     }
     for (const g of D.grupos) {
       const th = document.createElement('th');
-      th.className = 'grp'; th.colSpan = g.cols.length; th.textContent = g.rot; h1.appendChild(th);
+      th.className = 'grp'; th.colSpan = g.cols.length + (g.var ? 1 : 0) + (g.pct ? 3 : 0); th.textContent = g.rot; h1.appendChild(th);
       g.cols.forEach((campo, i) => {
         const s = document.createElement('th');
         s.textContent = campo.endsWith('(2T)') || campo.endsWith('_2t') ? '2T' : '1T';
         if (i === 0) s.classList.add('t1');
         ordenavel(s, campo, false); h2.appendChild(s);
       });
+      if (g.var) {
+        const s = document.createElement('th');
+        s.textContent = 'Var.'; s.title = 'Variação do 1º para o 2º turno';
+        ordenavel(s, g.var, false); h2.appendChild(s);
+      }
+      if (g.pct) {
+        [[g.pct.c1, '% 1T', 'Votos do candidato ÷ comparecimento no 1º turno'], [g.pct.c2, '% 2T', 'Votos do candidato ÷ comparecimento no 2º turno'],
+          [g.pct.var, 'Var. p.p.', 'Variação da porcentagem, em pontos percentuais']].forEach(([campo, rot, dica], i) => {
+          const s = document.createElement('th');
+          s.textContent = rot; s.title = dica;
+          if (i === 0) s.classList.add('t1');
+          ordenavel(s, campo, false); h2.appendChild(s);
+        });
+      }
     }
 
     const q = st.busca.toLowerCase();
@@ -318,7 +436,8 @@
     const lista = !q ? rows.slice() : rows.filter((r) => textoBusca(r).some((v) => String(v).toLowerCase().includes(q)));
     if (st.sort) {
       const c = st.sort;
-      lista.sort((x, y) => (typeof x[c] === 'string' ? x[c].localeCompare(y[c], 'pt-BR') : (x[c] ?? -Infinity) - (y[c] ?? -Infinity)) * st.dir);
+      const texto = rows.some((r) => typeof r[c] === 'string');
+      lista.sort((x, y) => (texto ? (x[c] ?? '').localeCompare(y[c] ?? '', 'pt-BR') : (x[c] ?? -Infinity) - (y[c] ?? -Infinity)) * st.dir);
     }
     const tbody = table.createTBody();
     const linha = (r, ehTotal) => {
@@ -329,6 +448,9 @@
         const c0 = tr.insertCell(); c0.className = 'c0 txt'; c0.textContent = ehTotal ? 'Total' : r.zona;
         const c1 = tr.insertCell(); c1.className = 'c1 txt'; c1.textContent = ehTotal ? '' : r.secao;
         const c2 = tr.insertCell(); c2.className = 'txt'; c2.textContent = ehTotal ? '' : r.local;
+        const e1 = tr.insertCell(); e1.className = 'txt t1'; e1.textContent = ehTotal ? '' : r.enc_1t ?? '–';
+        const marca = ehTotal ? '' : st.fEnc !== '' ? (D.filtrosEnc[+st.fEnc][1].includes(r.fe) ? ' no-filtro' : '') : (r.fe === D.destaqueEnc ? ' tarde' : '');
+        const e2 = tr.insertCell(); e2.className = 'txt' + marca; e2.textContent = ehTotal ? '' : r.enc_2t ?? '–';
       } else {
         const c0 = tr.insertCell(); c0.className = 'c0 txt';
         c0.textContent = ehTotal ? (modo === 'uf' ? 'Total do Brasil' : 'Total ' + (st.uf === 'ZZ' ? 'no exterior' : 'da UF')) : r.nome;
@@ -346,8 +468,19 @@
           const td = tr.insertCell();
           if (i === 0) td.className = 't1';
           td.textContent = r[campo] == null ? '–' : fmtN(r[campo]);
-          if (i === 1) seta(td, r[g.cols[0]], r[campo], g.inv);
         });
+        if (g.var) {
+          const td = tr.insertCell(), v = r[g.var];
+          td.textContent = v == null ? '–' : fmtVar(v);
+          if (v != null) td.className = classeVar(v, g.inv);
+        }
+        if (g.pct) {
+          const p1 = r[g.pct.c1], p2 = r[g.pct.c2], pv = r[g.pct.var];
+          const a = tr.insertCell(); a.className = 't1'; a.textContent = p1 == null ? '–' : fmtPct(p1);
+          tr.insertCell().textContent = p2 == null ? '–' : fmtPct(p2);
+          const c = tr.insertCell(); c.textContent = pv == null ? '–' : fmtPP(pv);
+          if (pv != null) c.className = classeVar(Math.round(pv * 10) / 10);
+        }
       }
     };
     linha(total, true);
@@ -357,10 +490,19 @@
     if (resta > 0) $('mais').textContent = 'Mostrar mais ' + fmtN(Math.min(PASSO, resta)) + ' (de ' + fmtN(lista.length) + ')';
   }
 
-  function preencherMunicipios() {
+  // Os seletores mostram só UFs e municípios que têm seções no filtro em uso
+  function preencherSeletores() {
+    const v = V();
+    const selUF = $('sel-uf');
+    const ufs = v.ufRows.map((r) => r.uf);
+    if (st.uf && !ufs.includes(st.uf)) ufs.push(st.uf);
+    selUF.replaceChildren(new Option('Brasil (por UF)', ''), ...ufs.map((uf) => new Option(nomeUF(uf) + (uf === 'ZZ' ? '' : ' (' + uf + ')'), uf)));
+    selUF.value = st.uf;
     const sel = $('sel-mun');
     if (!st.uf) { sel.replaceChildren(new Option('Escolha uma UF', '')); sel.disabled = true; return; }
-    sel.replaceChildren(new Option('Todos (por município)', ''), ...D.munsPorUF.get(st.uf).map((r) => new Option(r.nome, r.nome)));
+    const muns = (v.munsPorUF.get(st.uf) || []).map((r) => r.nome);
+    if (st.mun && !muns.includes(st.mun)) muns.push(st.mun);
+    sel.replaceChildren(new Option('Todos (por município)', ''), ...muns.map((m) => new Option(m, m)));
     sel.disabled = false;
     sel.value = st.mun;
   }
@@ -369,8 +511,8 @@
   async function irPara(uf, mun) {
     const meu = ++pedido;
     st.uf = uf; st.mun = mun; st.busca = ''; st.sort = null; st.dir = 1; st.limite = PASSO;
-    $('sel-uf').value = uf; $('busca').value = '';
-    preencherMunicipios();
+    $('busca').value = '';
+    preencherSeletores();
     if (mun && !secoesUF[uf]) {
       $('loader-uf-etapa').textContent = 'Carregando as seções de ' + nomeUF(uf) + '…';
       $('loader-uf').hidden = false; $('caixa').hidden = true; $('mais').hidden = true;
@@ -398,6 +540,8 @@
   $('sel-mun').addEventListener('change', (e) => irPara(st.uf, e.target.value));
   $('busca').addEventListener('input', (e) => { st.busca = e.target.value.trim(); st.limite = PASSO; desenhar(); });
   $('mais').addEventListener('click', () => { st.limite += PASSO; desenhar(); });
+  $('filtro-corte').addEventListener('change', (e) => { st.fEnc = e.target.value; st.limite = PASSO; preencherSeletores(); desenhar(); });
+  $('filtro-voto').addEventListener('change', (e) => { st.fVoto = e.target.value; st.limite = PASSO; preencherSeletores(); desenhar(); });
 
   const falhar = (msg) => {
     if (msg) $('carga-msg').textContent = msg;
@@ -410,7 +554,11 @@
     depois(() => {
       try { D = montarBrasil(window.DADOS_BRASIL); }
       catch (e) { return falhar('Não foi possível ler dados/brasil.js: ' + e.message); }
-      $('sel-uf').replaceChildren(new Option('Brasil (por UF)', ''), ...D.ufRows.map((r) => new Option(r.nome + (r.uf === 'ZZ' ? '' : ' (' + r.uf + ')'), r.uf)));
+      const opcoes = (lista) => lista.map(([rot], i) => new Option(rot[0].toUpperCase() + rot.slice(1), String(i)));
+      $('filtro-corte').replaceChildren(new Option('Todas', ''), ...opcoes(D.filtrosEnc));
+      $('filtro-voto').replaceChildren(new Option('Todas', ''), ...opcoes(D.filtrosVoto));
+      st.fEnc = ''; st.fVoto = '';
+      preencherSeletores();
       $('loader').hidden = true;
       $('totais').hidden = false;
       $('tabela-card').hidden = false;
