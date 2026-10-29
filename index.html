@@ -230,6 +230,13 @@
       if (B.finalistas.includes(n) && cols.length === 2) g.pct = {c1: n + ' (%1T)', c2: n + ' (%2T)', var: n + ' (var p.p.)', n1: cols[0], n2: cols[1]};
       grupos.push(g);
     }
+    // Soma dos candidatos que não foram ao 2º turno, logo depois de Branco e Nulo
+    const demais = nomes.filter((n) => fim(n) === 3);
+    const DEMAIS = 'Demais candidatos (1T)';
+    if (demais.length) {
+      numCols.push(DEMAIS);
+      grupos.splice(grupos.findIndex((g) => demais.includes(g.rot)), 0, {rot: 'Demais candidatos', cols: [DEMAIS]});
+    }
     // Grupos com os dois turnos ganham uma coluna de variação (2T − 1T), que também ordena
     for (const g of grupos) if (g.cols.length === 2) g.var = g.cols[0].replace(/_1t$| \(1T\)$/, (s) => (s === '_1t' ? '_var' : ' (var)'));
     const comVariacao = (r) => {
@@ -250,6 +257,7 @@
         if (n in tot1) r[n + ' (1T)'] = v1 ? v1[c1.get(n)] || 0 : null;
         if (n in tot2) r[n + ' (2T)'] = v2 ? v2[c2.get(n)] || 0 : null;
       }
+      if (demais.length) r[DEMAIS] = v1 ? demais.reduce((s, n) => s + r[n + ' (1T)'], 0) : null;
       return comVariacao(r);
     };
     const somar = (rows, base) => {
