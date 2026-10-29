@@ -50,6 +50,8 @@
   .ar-head h1 { font-family: var(--font-serif); font-weight: 400; font-size: var(--fs-title); margin: 0; text-wrap: balance; }
   .ar-head p { margin: var(--gap-xs) 0 0; color: var(--color-fg-muted); max-width: 70ch; }
   .ar-head b { font-weight: 600; color: var(--color-fg); }
+  .ar-head .ar-link { margin-top: var(--gap-sm); font-size: var(--fs-caption); }
+  .ar-head .ar-link a { color: var(--color-accent); }
   .trilha { display: flex; flex-wrap: wrap; gap: var(--gap-xs); align-items: center; margin: 0 0 var(--gap-xs); padding: 0; list-style: none; font-size: var(--fs-caption); color: var(--color-fg-muted); }
   .trilha li + li::before { content: "›"; margin-right: var(--gap-xs); }
   .trilha button { font: inherit; color: var(--color-accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
@@ -121,6 +123,7 @@
     <ol class="trilha" id="trilha" aria-label="Onde você está"></ol>
     <h1 id="titulo">Para onde foram os votos</h1>
     <p id="resumo">Votos para presidente em 2026, do Brasil inteiro até cada seção eleitoral, nos dois turnos. Carregando os dados…</p>
+    <p class="ar-link"><a href="analise-relatorio-pericial.html">Análise do "Relatório Pericial Independente" com estes dados →</a></p>
   </header>
 
   <section class="ar-loader" id="loader" role="status" aria-live="polite">

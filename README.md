@@ -159,6 +159,7 @@ Um único HTML, com o CSS e o JavaScript embutidos e nenhuma biblioteca externa.
 | `baixar_boletins.sh` | Baixa, confere e filtra os boletins do TSE |
 | `gerar_dados.py` | Gera `dados/` a partir de `csv/` |
 | `baixar_boletins.log` | Registro da última execução do download |
+| `analise-relatorio-pericial.html` | Análise ponto a ponto do "Relatório Pericial Independente" (outubro/2026) com os dados deste projeto, linkada no topo do site |
 | `og-image.png` | Imagem de compartilhamento, 1200×630 (WhatsApp, Facebook, X, LinkedIn, Telegram) |
 | `compartilhamento/imagem.html` | Fonte da imagem de compartilhamento |
 

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório Pericial 2026 — Análise</title>
+<meta name="description" content="Cada afirmação do "Relatório Pericial Independente" sobre a eleição de 2026 conferida com os boletins de urna do TSE dos dois turnos.">
+<link rel="canonical" href="https://erico-rosa.github.io/para-onde-foram-os-votos/analise-relatorio-pericial.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Para onde foram os votos">
+<meta property="og:title" content="Relatório Pericial 2026: análise ponto a ponto">
+<meta property="og:description" content="Cada afirmação do "Relatório Pericial Independente" sobre a eleição de 2026 conferida com os boletins de urna do TSE dos dois turnos.">
+<meta property="og:url" content="https://erico-rosa.github.io/para-onde-foram-os-votos/analise-relatorio-pericial.html">
+<meta property="og:image" content="https://erico-rosa.github.io/para-onde-foram-os-votos/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Relatório Pericial 2026: análise ponto a ponto">
+<meta name="twitter:description" content="Cada afirmação do "Relatório Pericial Independente" sobre a eleição de 2026 conferida com os boletins de urna do TSE dos dois turnos.">
+<meta name="twitter:image" content="https://erico-rosa.github.io/para-onde-foram-os-votos/og-image.png">
+<style>
+  :root {
+    --fg: #1d1f22; --muted: #5f646b; --bg: #f6f6f4; --panel: #ffffff; --line: #e2e2de;
+    --orig-bg: #f1f0ec; --orig-line: #c9c6bd; --accent: #2f5d8a;
+    --ok: #1f7a4a; --ok-bg: #e6f2eb; --bad: #b03a2e; --bad-bg: #f8e9e7; --warn: #8a5a00; --warn-bg: #fbf1dc; --na: #555a62; --na-bg: #eceef1;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding-block: 32px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 2rem; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+  h2 { font-size: 1.3rem; margin: 2.4em 0 .6em; padding-bottom: 6px; border-bottom: 2px solid var(--fg); text-wrap: balance; }
+  h3 { font-size: 1.05rem; margin: 1.6em 0 .4em; color: var(--accent); }
+  p { margin: .6em 0; }
+  .sub { color: var(--muted); margin: 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+  .orig { background: var(--orig-bg); border-left: 4px solid var(--orig-line); border-radius: 0 6px 6px 0; padding: 10px 16px; margin: 12px 0; color: #34373b; font-size: .95rem; }
+  .orig::before { content: "Trecho do relatório original"; display: block; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .orig table { font-size: .9rem; }
+  .analise { border-left: 4px solid var(--accent); padding: 4px 0 4px 16px; margin: 12px 0 20px; }
+  .analise > p:first-child { margin-top: 0; }
+  .tag { display: inline-block; font-size: .75rem; font-weight: 600; letter-spacing: .03em; padding: 2px 8px; border-radius: 999px; vertical-align: middle; white-space: nowrap; }
+  .t-bad { color: var(--bad); background: var(--bad-bg); }
+  .t-warn { color: var(--warn); background: var(--warn-bg); }
+  .t-ok { color: var(--ok); background: var(--ok-bg); }
+  .t-na { color: var(--na); background: var(--na-bg); }
+  .tabela { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; font-variant-numeric: tabular-nums; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { font-weight: 600; background: #fafaf8; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  tr.destaque td { background: #fffbea; }
+  .nota { color: var(--muted); font-size: .88rem; }
+  ul { padding-left: 1.2em; }
+  li { margin: .3em 0; }
+  code { font-size: .88em; background: #eeede8; padding: 1px 4px; border-radius: 4px; }
+  .volta { margin: 0 0 16px; font-size: .9rem; }
+  a { color: var(--accent); }
+  footer { margin-top: 3em; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+</style>
+</head>
+<body>
+<main>
+
+<p class="volta"><a href="index.html">← Para onde foram os votos: explore os dados por UF, município e seção</a></p>
+<h1>Relatório Pericial Independente — Eleições 2026: análise ponto a ponto</h1>
+<p class="sub">Cada afirmação do relatório conferida com os mesmos boletins de urna do TSE · 29 de outubro de 2026</p>
+
+<div class="card">
+  <p><strong>Como ler este documento.</strong> O texto do relatório original está reproduzido nos blocos cinza. Logo abaixo de cada um vem a análise, com os números calculados a partir dos boletins de urna (BWeb) dos dois turnos de todas as UFs e do exterior, baixados do servidor do TSE e conferidos pelo hash SHA-512 publicado junto de cada arquivo.</p>
+  <p><strong>Duas escolhas de método fazem diferença em quase tudo:</strong></p>
+  <ul>
+    <li><strong>Hora de Brasília.</strong> O campo <code>DT_ENCERRAMENTO</code> vem na hora local de cada urna. Desde 2022 a votação termina às 17h de Brasília no país todo, o que no Acre são 15h locais. Esta análise converte cada urna para a hora de Brasília antes de comparar com qualquer horário. O relatório original não fez isso: os números dele só aparecem quando se usa a hora local (veja o capítulo 1).</li>
+    <li><strong>O 1º turno como comparação.</strong> As mesmas 499 mil seções votaram em 4 de outubro, sem nenhuma prorrogação. Se um padrão aparece igual no 1º turno, ele não pode ter sido causado por algo que só aconteceu no 2º.</li>
+  </ul>
+</div>
+
+<h2>Resumo</h2>
+<div class="tabela">
+<table>
+  <tr><th>Afirmação do relatório</th><th>Veredito</th><th>Em uma frase</th></tr>
+  <tr><td>Os dados ficaram 72 horas em sigilo</td><td><span class="tag t-bad">Não se sustenta</span></td><td>Os arquivos do 2º turno estão no servidor do TSE desde segunda, 26/10, às 9h de Brasília.</td></tr>
+  <tr><td>Até as 17h, Flávio venceu com 52,39%</td><td><span class="tag t-bad">Erro de método</span></td><td>O número só sai usando a hora local; em hora de Brasília são 50,99%, e o mesmo padrão já existia no 1º turno.</td></tr>
+  <tr><td>A virada veio só das urnas encerradas depois das 17h</td><td><span class="tag t-bad">Não se sustenta</span></td><td>Lula cresceu praticamente o mesmo nas urnas que fecharam antes (+2,7 p.p.) e depois (+2,8 p.p.) das 17h.</td></tr>
+  <tr><td>2,5 milhões votaram fora do horário</td><td><span class="tag t-warn">Confunde conceitos</span></td><td>São eleitores de urnas que fecharam tarde, não votos dados depois das 17h; o BU não registra a hora de cada voto.</td></tr>
+  <tr><td>Seções após 19h tiveram votação "avassaladora" para Lula</td><td><span class="tag t-warn">Seleção de casos</span></td><td>Essas seções já votavam assim no 1º turno, e o RJ, estado com mais seções após 19h, deu maioria a Flávio.</td></tr>
+  <tr><td>8,6 milhões sem biometria, o dobro da margem</td><td><span class="tag t-warn">Confere, mas não prova</span></td><td>O número está certo, mas o 1º turno teve 8,3 milhões e a variação da biometria não tem relação com a variação do voto.</td></tr>
+  <tr><td>Seções quase unânimes para Lula (18 : 1)</td><td><span class="tag t-warn">Confere, mas não prova</span></td><td>São redutos que já votavam assim no 1º turno, com a mesma proporção.</td></tr>
+  <tr><td>Teste da Lei de Benford</td><td><span class="tag t-bad">Teste inadequado</span></td><td>Votos por seção não seguem Benford; os dois candidatos e até o comparecimento "falham" igualmente.</td></tr>
+  <tr><td>Fatos políticos e institucionais (capítulo 6)</td><td><span class="tag t-na">Fora dos dados</span></td><td>Nada nos boletins de urna confirma ou desmente esses episódios.</td></tr>
+</table>
+</div>
+
+<!-- ================================================================== -->
+<h2>Cabeçalho do relatório</h2>
+<div class="orig">
+  <p><strong>Abrangência:</strong> 100% dos Boletins de Urna (BWeb) das 28 Unidades da Federação<br>
+  <strong>Total processado:</strong> 499.205 seções eleitorais · 128.236.074 votos apurados<br>
+  <strong>Data da análise:</strong> 28 de outubro de 2026<br>
+  <strong>Fonte:</strong> Repositório oficial de Dados Abertos do TSE</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-ok">Confere</span> Os totais batem: o 2º turno tem 499.205 seções e 128.236.074 votos (o comparecimento, que inclui brancos e nulos). A base é a mesma usada aqui.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Introdução: o apagão de setenta e duas horas</h2>
+<div class="orig">
+  <p>Nenhum processo de auditoria sobre as eleições presidenciais de 2026 pode começar sem registrar a primeira e mais evidente anomalia do pleito: a quebra da cadeia de transparência imediata.</p>
+  <p>Em um sistema eletrônico propagandeado como instantâneo e ultramoderno, os resultados gerais foram totalizados e proclamados pelo Tribunal Superior Eleitoral na noite de domingo, 25 de outubro. No entanto, os microdados públicos de cada urna, fundamentais para a checagem independente de horários e biometria, foram trancados em sigilo técnico por quase três dias.</p>
+  <p>A liberação dos arquivos de Boletim de Urna (BWeb) ocorreu apenas na manhã desta quarta-feira, 28 de outubro. Durante setenta e duas horas, a sociedade civil e os peritos independentes foram privados do acesso aos dados primários, enquanto a máquina estatal acelerava o reconhecimento diplomático internacional, impunha medidas de exceção contra a oposição e consolidava o fato político consumado.</p>
+  <p>Com a abertura final dos arquivos, a equipe de inteligência processou a totalidade do banco de dados oficial: 499.205 seções eleitorais e 128.236.074 votos apurados. Os dados estão gravados e auditados, e a verdade que eles contam desmorona a narrativa oficial.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-bad">Não se sustenta</span> O servidor do TSE informa a data de publicação de cada arquivo (cabeçalho <code>Last-Modified</code>):</p>
+  <div class="tabela"><table>
+    <tr><th>Arquivo</th><th>Gerado em (no nome do arquivo)</th><th>Publicado no servidor</th><th>Depois do fim da votação</th></tr>
+    <tr><td>Boletins do 2º turno (todas as UFs)</td><td>26/10/2026, 07h42</td><td>26/10/2026, ~9h de Brasília</td><td>~16 horas</td></tr>
+    <tr><td>Boletins do 1º turno (para comparar)</td><td>05/10/2026, 14h03</td><td>06/10/2026, ~12h50 de Brasília</td><td>~44 horas</td></tr>
+  </table></div>
+  <p>Os arquivos do 2º turno saíram na manhã de segunda-feira, 16 horas depois do fim da votação, e não na quarta. Saíram mais rápido que os do 1º turno. Há uma ressalva justa: a página do conjunto de dados no portal do TSE ainda lista só o 1º turno. Quem dependia daquela página pode não ter encontrado os arquivos do 2º turno, embora eles estivessem no mesmo servidor, com o mesmo padrão de nome. Não é possível saber pelos dados quando o TSE divulgou o endereço. O resto do parágrafo (reconhecimento diplomático, medidas contra a oposição) não tem relação com os boletins de urna.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 1: o ponto de inflexão das 17h00</h2>
+<div class="orig">
+  <p>A análise do carimbo temporal gravado na memória física de cada urna eletrônica (DT_ENCERRAMENTO) revela que o Brasil viveu duas eleições completamente distintas no domingo:</p>
+  <table>
+    <tr><th>Janela Temporal</th><th>Resultado</th></tr>
+    <tr><td>Urnas encerradas até as 17h00 (prazo legal)</td><td>Flávio Bolsonaro venceu com 52,39% dos votos válidos, abrindo uma frente de quase 1,8 milhão de votos.</td></tr>
+    <tr><td>Urnas encerradas após as 17h00 (prorrogação)</td><td>Lula obteve uma explosão atípica de mais de 6,1 milhões de votos de vantagem, suficiente para anular a liderança da oposição e virar o resultado nacional.</td></tr>
+  </table>
+  <p><strong>A vitória de Lula foi fabricada exclusivamente no universo de urnas que encerraram as votações após o horário limite legal.</strong></p>
+</div>
+<div class="analise">
+  <p><span class="tag t-bad">Erro de método</span> Os números do relatório só aparecem quando se usa a <strong>hora local</strong> de cada urna:</p>
+  <div class="tabela"><table>
+    <tr><th>Urnas do 2º turno</th><th class="n">Seções</th><th class="n">Flávio (% válidos)</th><th class="n">Vantagem</th></tr>
+    <tr><td>Encerradas até 17h00, <strong>hora local</strong> (conta do relatório)</td><td class="n">150.771</td><td class="n">52,39%</td><td class="n">Flávio +1.747.639</td></tr>
+    <tr class="destaque"><td>Encerradas até 17h00, <strong>hora de Brasília</strong></td><td class="n">125.653</td><td class="n">50,99%</td><td class="n">Flávio +606.273</td></tr>
+    <tr><td>Encerradas a partir de 17h01, hora local (conta do relatório)</td><td class="n">348.407</td><td class="n">46,47%</td><td class="n">Lula +6.177.738</td></tr>
+    <tr class="destaque"><td>Encerradas a partir de 17h01, hora de Brasília</td><td class="n">373.525</td><td class="n">47,31%</td><td class="n">Lula +5.036.372</td></tr>
+  </table></div>
+  <p>A diferença são 25.119 seções de AC, AM, MS, MT, RO e RR. Nessas UFs a votação também terminou às 17h de Brasília, mas o relógio da urna marcava 15h ou 16h. Contadas pela hora local, elas parecem ter fechado "no prazo". Nessas seções Flávio teve 59,7% dos válidos e 1,14 milhão de votos de vantagem, e é isso que infla o resultado dele no grupo "até 17h00" da conta do relatório.</p>
+
+  <p><strong>Mesmo com a hora certa, a divisão "até 17h × depois" não mostra uma virada.</strong> Ela separa tipos diferentes de seção: urnas maiores, com fila, fecham mais tarde. O teste decisivo é olhar as mesmas seções nos dois turnos. No 1º turno não houve prorrogação nenhuma:</p>
+  <div class="tabela"><table>
+    <tr><th>Mesmas seções, separadas pelo encerramento no 2º turno</th><th class="n">Lula no 1º turno*</th><th class="n">Lula no 2º turno</th><th class="n">Variação</th></tr>
+    <tr><td>Encerradas até 17h00</td><td class="n">46,27%</td><td class="n">49,01%</td><td class="n">+2,74 p.p.</td></tr>
+    <tr><td>Encerradas a partir de 17h01</td><td class="n">49,88%</td><td class="n">52,69%</td><td class="n">+2,81 p.p.</td></tr>
+  </table></div>
+  <p class="nota">* No 1º turno, Lula ÷ (Lula + Flávio), para comparar com o 2º turno, que só tem os dois.</p>
+  <p>As seções que fecharam depois das 17h já eram mais favoráveis a Lula no 1º turno, e o crescimento dele entre os turnos foi praticamente igual nos dois grupos. Se a prorrogação tivesse "fabricado" votos, o crescimento seria muito maior nas urnas que fecharam tarde. Não é.</p>
+  <p>O próprio 1º turno mostra a mesma "duas eleições". Separando pela hora de encerramento daquele dia, Flávio teve 54,16% dos válidos nas urnas fechadas até as 17h00 e 46,42% nas fechadas depois. E fechar depois das 17h é a regra, não a exceção: isso aconteceu com 91,5% das urnas no 1º turno e 74,8% no 2º. Quem está na fila às 17h tem direito de votar, e a urna só é encerrada depois do último eleitor.</p>
+  <p>Dentro de cada região a diferença quase some. No Nordeste, Lula teve 70,0% nas urnas fechadas até as 17h00 e 69,2% nas fechadas depois. O contraste nacional vem principalmente de quais lugares têm mais filas, e não do horário em si.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 2: a demolição do mito dos trinta e quatro mil votos</h2>
+<div class="orig">
+  <p>Após a contestação da oposição sobre a prorrogação de duas horas concedida pelo ministro Cristiano Zanin, a grande mídia e os porta-vozes do governo divulgaram amplamente que apenas trinta e quatro mil votos teriam sido depositados no período estendido, qualificando a medida como juridicamente inofensiva. Os números oficiais desmentem essa versão de forma acachapante:</p>
+  <table>
+    <tr><th>Janela de Encerramento</th><th>Seções</th><th>Eleitores</th><th>% Lula</th></tr>
+    <tr><td>17h01 a 17h15</td><td>339.593</td><td>88.071.750</td><td>53,46%</td></tr>
+    <tr><td>17h16 a 18h59</td><td>2.472</td><td>674.799</td><td>57,16%</td></tr>
+    <tr><td>Após as 19h00</td><td>6.333</td><td>1.856.306</td><td>—</td></tr>
+  </table>
+  <p>Mais de dois milhões e meio de eleitores votaram em urnas que extrapolaram os limites normais. E nessas seções que invadiram a noite de domingo, o desempenho do governismo atingiu índices avassaladores:</p>
+  <table>
+    <tr><th>Estado</th><th>Seções após 19h</th><th>% para Lula</th></tr>
+    <tr><td>Bahia</td><td>936</td><td>72,31%</td></tr>
+    <tr><td>Pernambuco</td><td>657</td><td>65,70%</td></tr>
+    <tr><td>Maranhão</td><td>—</td><td>83,31%</td></tr>
+    <tr><td>São Paulo</td><td>1.571</td><td>57,46%</td></tr>
+  </table>
+  <p>Em São Paulo, as 1.571 seções que cruzaram as 19h deram 57,46% para Lula, contrariando o comportamento eleitoral do restante do estado.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-warn">Confunde conceitos</span> A tabela de janelas também é em hora local; os números conferem exatamente com essa conta (339.593 seções, 88.071.750 eleitores, 53,46%). Em hora de Brasília:</p>
+  <div class="tabela"><table>
+    <tr><th>Encerramento (hora de Brasília)</th><th class="n">Seções 2º turno</th><th class="n">Eleitores 2º turno</th><th class="n">Lula (% válidos)</th><th class="n">Seções 1º turno</th><th class="n">Eleitores 1º turno</th></tr>
+    <tr><td>17h01 a 17h15</td><td class="n">364.627</td><td class="n">94.073.052</td><td class="n">52,61%</td><td class="n">332.080</td><td class="n">80.178.396</td></tr>
+    <tr><td>17h16 a 18h59</td><td class="n">2.546</td><td class="n">692.436</td><td class="n">57,09%</td><td class="n">116.540</td><td class="n">32.853.022</td></tr>
+    <tr><td>A partir das 19h</td><td class="n">6.352</td><td class="n">1.861.259</td><td class="n">55,18%</td><td class="n">8.366</td><td class="n">2.468.777</td></tr>
+  </table></div>
+  <p>O ponto central: <strong>os 2,5 milhões são eleitores de urnas que fecharam tarde, não votos dados depois das 17h.</strong> Uma urna encerrada às 19h recebeu a maior parte dos seus cerca de 300 votos durante o dia. O boletim de urna não registra a hora de cada voto, então ele não permite medir quantos votos foram dados no período estendido, nem confirmar ou desmentir o número de 34 mil.</p>
+  <p>Também não é verdade que o 2º turno "invadiu a noite" de forma inédita. O 1º turno, em que cada eleitor digitava seis votos (presidente, governador, dois senadores e dois deputados) e por isso as filas eram mais longas, teve mais urnas fechadas a partir das 19h (8.366 contra 6.352) e 35 milhões de eleitores em urnas encerradas depois das 17h15.</p>
+
+  <p><span class="tag t-warn">Seleção de casos</span> Os percentuais por estado conferem, mas faltam as comparações que dizem se eles são estranhos:</p>
+  <div class="tabela"><table>
+    <tr><th>UF</th><th class="n">Seções a partir das 19h</th><th class="n">Lula nessas seções, 2º turno</th><th class="n">Lula nessas mesmas seções, 1º turno*</th><th class="n">Lula nas outras seções dos mesmos municípios</th><th class="n">Lula no estado</th></tr>
+    <tr><td>RJ</td><td class="n">2.805</td><td class="n">45,81%</td><td class="n">41,61%</td><td class="n">48,66%</td><td class="n">46,90%</td></tr>
+    <tr><td>SP</td><td class="n">1.571</td><td class="n">57,46%</td><td class="n">54,75%</td><td class="n">53,50%</td><td class="n">46,15%</td></tr>
+    <tr><td>BA</td><td class="n">936</td><td class="n">72,31%</td><td class="n">70,09%</td><td class="n">71,23%</td><td class="n">71,31%</td></tr>
+    <tr><td>PE</td><td class="n">657</td><td class="n">65,70%</td><td class="n">63,69%</td><td class="n">64,56%</td><td class="n">69,20%</td></tr>
+    <tr><td>PB</td><td class="n">275</td><td class="n">52,56%</td><td class="n">50,24%</td><td class="n">54,66%</td><td class="n">67,46%</td></tr>
+    <tr><td>MA</td><td class="n">3</td><td class="n">83,31%</td><td class="n">82,15%</td><td class="n">73,87%</td><td class="n">69,54%</td></tr>
+  </table></div>
+  <p class="nota">* Lula ÷ (Lula + Flávio) no 1º turno.</p>
+  <ul>
+    <li><strong>O relatório deixou de fora o RJ</strong>, o estado com mais seções encerradas a partir das 19h (2.805). Lá essas seções deram maioria a Flávio (54,19%).</li>
+    <li><strong>São Paulo:</strong> 1.481 das 1.571 seções ficam na capital. Elas não "contrariam o estado"; votaram parecido com o resto da cidade e da região metropolitana (53,50% nas outras seções dos mesmos municípios) e já eram favoráveis a Lula no 1º turno (54,75%).</li>
+    <li><strong>Bahia:</strong> 730 das 936 seções ficam em Salvador. O resultado delas (72,31%) é praticamente igual ao do estado (71,31%) e ao das outras seções dos mesmos municípios (71,23%).</li>
+    <li><strong>Maranhão:</strong> o relatório não informa o número de seções. São <strong>3 seções</strong>, com 634 eleitores. Destacar 83,31% sem dizer isso faz parecer um fenômeno estadual.</li>
+    <li>Em todas essas seções, a variação de Lula entre os turnos (de +1,2 a +4,2 p.p.) fica perto da variação nacional (+2,8 p.p.).</li>
+  </ul>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 3: o colapso da biometria</h2>
+<div class="orig">
+  <p>A maior vulnerabilidade material de todo o processo de 2026 reside no campo oficial QT_ELEI_BIOM_SEM_HABILITACAO. Esse dado registra o número de pessoas que não conseguiram validar a impressão digital e foram autorizadas a votar por liberação manual do mesário, mediante a simples digitação do ano de nascimento:</p>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Total de eleitores liberados sem biometria</td><td>8.632.488 votos (6,73% do comparecimento nacional)</td></tr>
+    <tr><td>Margem final de vitória de Lula sobre Flávio</td><td>4.430.191 votos</td></tr>
+    <tr><td>Relação entre liberação manual e margem</td><td>Quase o dobro da diferença total da eleição</td></tr>
+  </table>
+  <p>O contingente de pessoas que depositaram votos na urna sem a salvaguarda da identificação biométrica digital é quase o dobro da diferença total da eleição. A perícia realizou o teste de correlação estatística entre o percentual de votos manuais e o percentual de votos obtidos por Lula.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-warn">Confere, mas não prova</span> Os três números estão certos: 8.632.488 eleitores (6,73% do comparecimento) e margem de 4.430.191 votos. O problema é o que se conclui deles.</p>
+  <ul>
+    <li><strong>O que o campo significa.</strong> Pelo dicionário de dados do TSE, <code>QT_ELEI_BIOM_SEM_HABILITACAO</code> é a "quantidade de eleitoras e eleitores com biometria, mas que não foram habilitados por meio dela". O campo diz só que a habilitação não foi pela digital. Ele não informa como o eleitor foi identificado nem diz que a identificação deixou de ser feita.</li>
+    <li><strong>Comparar com a margem não faz sentido.</strong> Esses 8,6 milhões são eleitores de todos os lados, espalhados por todas as seções. Para eles explicarem a margem, seria preciso que fossem fraudulentos e votassem quase todos num só candidato. Nada nos dados indica isso (veja abaixo).</li>
+    <li><strong>Não é novidade do 2º turno.</strong> No 1º turno foram 8.342.249 eleitores, 6,66% do comparecimento, contra 6,73% no 2º. A taxa é praticamente a mesma.</li>
+  </ul>
+  <p>O relatório diz que fez o teste de correlação, mas não mostra o resultado. Ele está aqui, seção por seção:</p>
+  <div class="tabela"><table>
+    <tr><th>Medida (499.205 seções)</th><th class="n">Correlação (r)</th><th>Leitura</th></tr>
+    <tr><td>% sem biometria × % de Lula nos válidos, no 2º turno</td><td class="n">0,068</td><td>Muito fraca</td></tr>
+    <tr><td>Variação do % sem biometria × variação do voto em Lula, do 1º para o 2º turno</td><td class="n">0,0007</td><td>Nenhuma</td></tr>
+  </table></div>
+  <p>A segunda linha é a que importa. Se a liberação manual estivesse sendo usada para colocar votos para Lula, as seções onde ela aumentou do 1º para o 2º turno deveriam ser as que mais cresceram para ele. Não há relação nenhuma.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 4: aberrações de unanimidade</h2>
+<div class="orig">
+  <p>Em sistemas eleitorais massivos e altamente polarizados, os percentuais de votação seguem distribuições gaussianas suaves em torno da média. A base de 2026 exibe anomalias extremas de seções quase unânimes concentradas em áreas rurais:</p>
+  <table>
+    <tr><th>Tipo de Seção</th><th>Lula</th><th>Flávio Bolsonaro</th><th>Razão</th></tr>
+    <tr><td>100% dos votos válidos</td><td>106 seções</td><td>4 seções</td><td>26,5 : 1</td></tr>
+    <tr><td>Mais de 90% dos votos</td><td>6.899 seções</td><td>384 seções</td><td>18 : 1</td></tr>
+  </table>
+  <p><strong>Existe uma desproporção aberrante de dezoito para um na existência de seções com mais de noventa por cento de votos pró Lula. Essas seções coincidem com zonas rurais de baixíssima fiscalização partidária independente, onde a taxa de liberação sem biometria atinge seus picos mais elevados.</strong></p>
+</div>
+<div class="analise">
+  <p><span class="tag t-warn">Confere, mas não prova</span> As 106 e 4 seções com 100% conferem exatamente. Para mais de 90% dos válidos, a conta aqui dá 6.816 para Lula e 378 para Flávio. A diferença é pequena e provavelmente vem de algum detalhe de critério.</p>
+  <ul>
+    <li><strong>Não existe regra de que votos por seção sigam uma curva gaussiana.</strong> O Brasil vota de forma muito diferente por região, e a soma de regiões com médias distantes produz caudas longas. As seções acima de 90% para Lula estão concentradas no MA (1.549), na BA (1.345), no PI (870), em PE (667) e no CE (662). As de Flávio estão no RS (116), em SC (61), no PA (51), em MT (48) e no PR (31).</li>
+    <li><strong>São redutos antigos, não novidades do 2º turno.</strong> Nessas mesmas seções, Lula já tinha 92,4% no 1º turno (contando só Lula e Flávio). As seções acima de 90% para Flávio também já lhe davam cerca de 93% no 1º turno.</li>
+    <li><strong>A desproporção já existia no 1º turno:</strong> com todos os candidatos, 3.639 seções deram mais de 90% dos válidos a Lula e 184 a Flávio, uma razão de cerca de 20 : 1.</li>
+    <li><strong>A biometria não aponta para o lado que o relatório diz.</strong> Nas seções acima de 90% para Lula, 8,37% dos eleitores não foram habilitados pela digital; nas acima de 90% para Flávio, 9,10%.</li>
+    <li><strong>"Zonas rurais" e "baixa fiscalização" não estão nos dados.</strong> O boletim de urna não informa se a seção é rural, nem quantos fiscais havia. O relatório não diz de onde tirou essa informação.</li>
+  </ul>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 5: o teste da Lei de Benford</h2>
+<div class="orig">
+  <p>Submetemos o conjunto de 499.205 seções eleitorais ao teste forense do primeiro dígito significativo de Benford, uma ferramenta matemática consagrada internacionalmente para detectar manipulação ou artificialidade em dados estatísticos massivos. O comportamento dos dígitos dos votos de ambos os candidatos foi comparado com a curva logarítmica natural.</p>
+  <p>[Nota: Os gráficos do teste de Benford e da correlação biométrica não foram incluídos neste documento, pois dependiam de imagens anexas à análise original.]</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-bad">Teste inadequado</span> O relatório não apresenta o resultado. Ele está aqui: a frequência do primeiro dígito dos votos por seção, em porcentagem.</p>
+  <div class="tabela"><table>
+    <tr><th>Primeiro dígito</th><th class="n">1</th><th class="n">2</th><th class="n">3</th><th class="n">4</th><th class="n">5</th><th class="n">6</th><th class="n">7</th><th class="n">8</th><th class="n">9</th></tr>
+    <tr><td>Esperado por Benford</td><td class="n">30,1</td><td class="n">17,6</td><td class="n">12,5</td><td class="n">9,7</td><td class="n">7,9</td><td class="n">6,7</td><td class="n">5,8</td><td class="n">5,1</td><td class="n">4,6</td></tr>
+    <tr><td>Lula, 2º turno</td><td class="n">60,8</td><td class="n">9,3</td><td class="n">0,9</td><td class="n">1,7</td><td class="n">2,8</td><td class="n">4,3</td><td class="n">5,6</td><td class="n">6,9</td><td class="n">7,7</td></tr>
+    <tr><td>Flávio, 2º turno</td><td class="n">61,9</td><td class="n">7,2</td><td class="n">2,8</td><td class="n">3,4</td><td class="n">3,9</td><td class="n">4,3</td><td class="n">4,9</td><td class="n">5,4</td><td class="n">6,1</td></tr>
+    <tr><td>Lula, 1º turno</td><td class="n">48,7</td><td class="n">4,0</td><td class="n">2,0</td><td class="n">3,9</td><td class="n">6,1</td><td class="n">7,9</td><td class="n">9,1</td><td class="n">9,4</td><td class="n">9,0</td></tr>
+    <tr><td>Flávio, 1º turno</td><td class="n">60,2</td><td class="n">4,8</td><td class="n">2,9</td><td class="n">3,7</td><td class="n">4,2</td><td class="n">4,9</td><td class="n">5,7</td><td class="n">6,4</td><td class="n">7,3</td></tr>
+    <tr><td>Comparecimento, 2º turno</td><td class="n">13,5</td><td class="n">64,2</td><td class="n">21,3</td><td class="n">0,2</td><td class="n">0,1</td><td class="n">0,1</td><td class="n">0,2</td><td class="n">0,2</td><td class="n">0,2</td></tr>
+  </table></div>
+  <p>Todas as linhas fogem muito da curva de Benford: os votos de Lula, os de Flávio, os dos dois turnos e até o comparecimento. O motivo é conhecido: a lei de Benford vale para números que se espalham por várias ordens de grandeza. Uma seção eleitoral tem em média 257 eleitores e quase nunca passa de 500, então os votos de um candidato ficam presos numa faixa estreita, e o primeiro dígito depende do tamanho das seções, não de manipulação. Um teste em que tudo "falha", inclusive o que ninguém acusa de fraude, não distingue nada.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Capítulo 6: o contexto institucional e a operação de abafamento</h2>
+<div class="orig">
+  <p>A matemática não opera no vácuo. O comportamento anômalo dos dados ganha contornos definitivos quando analisado em conjunto com as ações do aparato estatal:</p>
+  <p><strong>A Ordem dos Sete Minutos.</strong> O ministro Alexandre de Moraes assinou o cancelamento dos passaportes de Flávio Bolsonaro exatamente sete minutos após a proclamação das urnas, antes mesmo que os recursos da oposição fossem protocolados.</p>
+  <p><strong>A Ameaça de Prisão Preventiva.</strong> Uma ala da Polícia Federal articulou a prisão cautelar do principal líder da oposição com base em boatos de imprensa, forçando a sua extração do país sob proteção diplomática dos Estados Unidos.</p>
+  <p><strong>A Cortina de Fumaça sobre o Banco Master.</strong> Toda a pirotecnia contra a oposição foi ativada na mesma semana em que deveriam entrar em pauta as apurações financeiras sobre Daniel Vorcaro e os quarenta milhões de dólares repassados à família de magistrados do tribunal superior.</p>
+  <p><strong>O Reconhecimento Internacional Dividido.</strong> Enquanto Donald Trump classificou a eleição como manchada por fraude decorrente da prorrogação e a Argentina acolheu a oposição, a mídia estatal chinesa admitiu que a extensão de duas horas impulsionou a virada governista.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-na">Fora dos dados</span> Nenhum desses episódios aparece nos boletins de urna, e esta análise não tem como confirmá-los nem desmenti-los. Eles precisam ser checados em outras fontes, como decisões publicadas, registros oficiais e a imprensa. O que se pode dizer é que eles não mudam os números: se os capítulos 1 a 5 não mostram anomalia nos dados, o contexto político não cria uma.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Conclusão pericial: o veredito dos dados</h2>
+<div class="orig">
+  <ul>
+    <li>A eleição regulamentar até as 17h00 foi vencida por Flávio Bolsonaro.</li>
+    <li>A virada ocorreu exclusivamente em urnas encerradas após o prazo legal.</li>
+    <li>Mais de oito milhões e seiscentos mil votos foram emitidos sem verificação biométrica digital, quase o dobro da diferença que decidiu a presidência.</li>
+    <li>Milhões de votos foram computados na calada da noite sob picos de mais de setenta por cento pró governo.</li>
+    <li>Os dados foram sonegados da sociedade por setenta e duas horas.</li>
+  </ul>
+  <p><strong>O resultado proclamado pelo sistema não possui integridade matemática, quebrou os protocolos mais elementares de controle biométrico e foi viabilizado por uma intervenção judicial monocrática que alterou as regras no meio do jogo.</strong></p>
+</div>
+<div class="analise">
+  <ul>
+    <li><span class="tag t-bad">Não se sustenta</span> <strong>Não existe uma "eleição regulamentar até as 17h00".</strong> Separar urnas pela hora em que fecharam não separa votos dados antes e depois das 17h. E, com a hora certa, a vantagem de Flávio nesse grupo cai de 1,8 milhão para 606 mil votos. O mesmo padrão aparece no 1º turno, que não teve prorrogação.</li>
+    <li><span class="tag t-bad">Não se sustenta</span> <strong>A "virada" não ficou concentrada nas urnas tardias.</strong> Lula cresceu +2,7 p.p. nas urnas fechadas até as 17h00 e +2,8 p.p. nas fechadas depois. É o mesmo crescimento.</li>
+    <li><span class="tag t-warn">Confere, mas não prova</span> <strong>8,6 milhões sem habilitação biométrica</strong> é um número correto, mas igual ao do 1º turno em proporção (6,66% contra 6,73%), e a variação dele entre os turnos não tem relação com a variação do voto (r = 0,0007).</li>
+    <li><span class="tag t-warn">Seleção de casos</span> <strong>As urnas que fecharam depois das 19h</strong> somam 1,9 milhão de eleitores, a maioria em capitais (São Paulo, Rio, Salvador, Recife). Deram 55% a Lula no total, com o RJ dando maioria a Flávio. E votaram como já votavam no 1º turno.</li>
+    <li><span class="tag t-bad">Não se sustenta</span> <strong>Os dados não ficaram 72 horas em sigilo:</strong> estão no servidor do TSE desde a manhã de segunda-feira, embora a página do portal não os liste.</li>
+  </ul>
+  <p>Os boletins de urna não mostram sinal de que o resultado tenha sido produzido pelas urnas que fecharam tarde nem pela habilitação sem biometria. O que eles mostram é um país que vota de forma muito diferente por região e que repetiu, no 2º turno, o padrão do 1º, com um deslocamento de cerca de 3 pontos para Lula espalhado de forma parecida por todos os tipos de seção. Questões jurídicas, como a validade de uma prorrogação, não se resolvem com esses dados.</p>
+</div>
+
+<!-- ================================================================== -->
+<h2>Anexo do relatório: nota de esclarecimento técnico</h2>
+
+<h3>1. O que este estudo não é: o mito das invasões externas</h3>
+<div class="orig">
+  <p>É fundamental esclarecer ao público e aos especialistas o que nunca esteve no radar pericial: o estudo não investigou e não se baseia em teorias sobre invasão de hackers, adulteração de código fonte ou manipulação de sistemas por satélite. Teses mirabolantes de interferência cibernética invisível servem apenas para desviar a atenção daquilo que realmente pode ser auditado e comprovado no mundo real. A perícia não buscou fantasmas em servidores. A perícia debruçou-se sobre o chão de fábrica do processo eleitoral: o procedimento físico da votação, a presença de fiscais e o cumprimento das normas legais na ponta da linha.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-na">Fora dos dados</span> Nada a conferir: é uma delimitação de escopo. Vale notar que "presença de fiscais" não é uma informação que exista nos boletins de urna usados pelo próprio relatório.</p>
+</div>
+
+<h3>2. A lacuna investigada: a fragilidade da fiscalização e a liberação manual</h3>
+<div class="orig">
+  <p>O coração da investigação concentrou-se em uma vulnerabilidade humana e processual conhecida, mas que foi explorada em escala inédita no segundo turno: a substituição do controle biométrico digital pela liberação manual do mesário. A propaganda institucional vendeu ao país que a biometria era o escudo inviolável que impedia um eleitor de votar no lugar de outro ou que cadastros fantasmas fossem ativados. No entanto, o próprio sistema possui uma válvula de escape regulamentar: quando a digital do eleitor falha quatro vezes no leitor, a urna autoriza o mesário a liberar a votação mediante a simples digitação do ano de nascimento do cidadão.</p>
+  <p>Em seções urbanas com intensa fiscalização de partidos de oposição, essa regra de exceção é aplicada com testemunhas e sob controle social. A pergunta metodológica que fizemos foi: o que acontece com essa regra de exceção nas regiões mais isoladas do país, nos grotões rurais e nas seções onde a oposição não possuía nenhum fiscal físico acompanhando a mesa receptora? Ao retirar a trava biométrica do computador e devolver o poder absoluto de liberação à caneta de quem opera o terminal, a tecnologia de ponta é anulada e o processo retrocede ao velho modelo de confiança cega em quem está na sala.</p>
+</div>
+<div class="analise">
+  <p><span class="tag t-bad">Não se sustenta</span> <strong>"Escala inédita no segundo turno"</strong> é desmentido pelo próprio campo usado: 6,66% dos eleitores no 1º turno, 6,73% no 2º. O aumento em números absolutos (+290 mil) acompanha o aumento do comparecimento (+3 milhões). A descrição do procedimento do mesário não pode ser conferida pelos boletins de urna, que registram só a contagem.</p>
+</div>
+
+<h3>3. A metodologia de coleta e auditoria</h3>
+<div class="orig">
+  <ul>
+    <li><strong>Fonte Primária Aberta:</strong> Trabalhamos exclusivamente com os arquivos oficiais de Boletins de Urna (BWeb) do segundo turno disponibilizados pelo repositório oficial de Dados Abertos do TSE. Todos os arquivos foram checados contra os seus respectivos hashes criptográficos originais (.sha512).</li>
+    <li><strong>Universalidade do Banco:</strong> Não fizemos amostragem. Processamos cem por cento das 499.205 seções eleitorais do Brasil e do exterior, cobrindo os 128.236.074 votos registrados.</li>
+    <li><strong>Cruzamento de Três Variáveis Internas:</strong> A quantidade de eleitores habilitados sem validação biométrica (QT_ELEI_BIOM_SEM_HABILITACAO); o horário físico de encerramento gravado pela urna eletrônica (DT_ENCERRAMENTO); e a votação nominal conferida a cada candidato na respectiva seção (QT_VOTOS).</li>
+  </ul>
+</div>
+<div class="analise">
+  <p><span class="tag t-warn">Incompleto</span> A fonte e o tamanho da base conferem e são os mesmos usados aqui. Mas a metodologia tem duas lacunas que mudam as conclusões:</p>
+  <ul>
+    <li><strong>Usou só o 2º turno.</strong> Sem o 1º turno como comparação, qualquer diferença entre grupos de seções parece efeito da prorrogação, mesmo quando já existia antes.</li>
+    <li><strong>Não converteu o fuso horário.</strong> <code>DT_ENCERRAMENTO</code> está na hora local da urna. Comparar todas as urnas com "17h00" mistura instantes diferentes: 17h no Rio são 15h no Acre.</li>
+  </ul>
+</div>
+
+<h3>4. O diagnóstico factual extraído da base</h3>
+<div class="orig">
+  <ul>
+    <li><strong>A Quebra do Controle Superou a Margem de Vitória:</strong> O volume de eleitores liberados manualmente por ano de nascimento somou 8.632.488 votos, enquanto a diferença final entre os dois candidatos foi de 4.430.191 votos. Ou seja: a margem de segurança do sistema foi superada em quase duas vezes pelo volume de liberações manuais.</li>
+    <li><strong>A Curva de Correlação Positiva:</strong> Nas seções onde mais de noventa e cinco por cento dos eleitores usaram a digital com sucesso, o equilíbrio entre os candidatos foi evidente. Mas nas seções onde as taxas de liberação manual escalaram para vinte, trinta ou mais de cinquenta por cento, a votação de Lula disparou em linha reta, atingindo picos de mais de sessenta e um por cento.</li>
+    <li><strong>O Casamento com a Janela Noturna:</strong> As seções que fecharam após o horário regulamentar das dezessete horas, beneficiadas pela prorrogação monocrática, coincidem de forma assustadora com os municípios e zonas de maior taxa de votos sem biometria e de menor presença de fiscais partidários independentes.</li>
+  </ul>
+</div>
+<div class="analise">
+  <p><strong>Margem de vitória:</strong> veja o capítulo 3. Os números estão certos, mas a comparação não sustenta a conclusão.</p>
+  <p><span class="tag t-warn">Confere, mas não prova</span> <strong>Curva de correlação.</strong> Os "mais de 61%" conferem, mas na faixa de mais de 50% sem biometria há só 97 seções, com 23 mil eleitores (0,02% do total). E o padrão some quando se separam as regiões, e já existia no 1º turno:</p>
+  <div class="tabela"><table>
+    <tr><th>Eleitores não habilitados pela digital (2º turno)</th><th class="n">Seções</th><th class="n">Lula, Brasil</th><th class="n">Lula, Nordeste</th><th class="n">Lula, fora do Nordeste</th><th class="n">Mesmas seções, Lula no 1º turno*</th></tr>
+    <tr><td>Menos de 5%</td><td class="n">175.610</td><td class="n">51,2%</td><td class="n">66,9%</td><td class="n">45,7%</td><td class="n">48,1%</td></tr>
+    <tr><td>5% a 10%</td><td class="n">238.213</td><td class="n">51,5%</td><td class="n">69,3%</td><td class="n">44,5%</td><td class="n">48,7%</td></tr>
+    <tr><td>10% a 20%</td><td class="n">81.228</td><td class="n">53,9%</td><td class="n">73,5%</td><td class="n">43,6%</td><td class="n">51,7%</td></tr>
+    <tr><td>20% a 30%</td><td class="n">3.804</td><td class="n">58,1%</td><td class="n">78,3%</td><td class="n">42,6%</td><td class="n">56,6%</td></tr>
+    <tr><td>30% a 50%</td><td class="n">253</td><td class="n">59,2%</td><td class="n">78,6%</td><td class="n">43,1%</td><td class="n">57,8%</td></tr>
+    <tr><td>Mais de 50%</td><td class="n">97</td><td class="n">61,2%</td><td class="n">73,7%</td><td class="n">46,6%</td><td class="n">58,8%</td></tr>
+  </table></div>
+  <p class="nota">Percentuais dos votos válidos. * No 1º turno, Lula ÷ (Lula + Flávio).</p>
+  <p>Fora do Nordeste, o voto em Lula não sobe com a falta de biometria: fica entre 43% e 47% em todas as faixas. A "linha reta" nacional aparece porque o Nordeste tem proporcionalmente mais seções com taxas altas. E as mesmas seções já mostravam o mesmo degrau no 1º turno.</p>
+  <p><span class="tag t-bad">Não se sustenta</span> <strong>Casamento com a janela noturna.</strong> É o contrário: as urnas que fecharam mais tarde tiveram <em>menos</em> eleitores não habilitados pela digital.</p>
+  <div class="tabela"><table>
+    <tr><th>Encerramento no 2º turno (hora de Brasília)</th><th class="n">Eleitores não habilitados pela digital</th></tr>
+    <tr><td>Até 17h00</td><td class="n">7,15%</td></tr>
+    <tr><td>A partir de 17h01</td><td class="n">6,60%</td></tr>
+    <tr><td>A partir das 19h</td><td class="n">6,35%</td></tr>
+    <tr><td>Brasil</td><td class="n">6,73%</td></tr>
+  </table></div>
+  <p>Sobre "menor presença de fiscais": os boletins de urna não trazem essa informação.</p>
+</div>
+
+<div class="orig">
+  <p>O objetivo deste trabalho foi demonstrar, com a frieza dos microdados, que a fragilidade do sistema não está em um ataque cibernético de ficção científica, mas na facilidade com que o rito de fiscalização e a trava biométrica foram desarmados na ponta da linha em um volume de milhões de votos. Quando um pleito presidencial de quase cento e trinta milhões de eleitores é decidido por quatro milhões de votos, e quase nove milhões foram chancelados sem a conferência eletrônica da identidade do votante sob a proteção da escuridão de uma prorrogação, a integridade do processo deixa de ser uma certeza matemática e torna-se uma questão em aberto que nenhum tribunal tem o direito de ignorar.</p>
+  <p><strong>Os dados estão disponíveis, o método é replicável e os números falam por si mesmos.</strong></p>
+</div>
+<div class="analise">
+  <p>Concordamos com a última frase: os dados estão disponíveis e o método é replicável. Replicado, ele mostra que os números do relatório dependem de ignorar o fuso horário e de não comparar com o 1º turno. Feitas essas duas correções, os padrões apontados ou desaparecem, ou já existiam antes da prorrogação. Os "quase nove milhões" não votaram "sob a proteção da escuridão de uma prorrogação": eles estão espalhados por todas as seções, inclusive nas que fecharam antes das 17h, onde a taxa foi até maior.</p>
+</div>
+
+<footer>
+  <p><strong>Fonte:</strong> boletins de urna (BWeb) do 1º e do 2º turno de 2026, de todas as UFs e do exterior, baixados de <code>cdn.tse.jus.br/estatistica/sead/eleicoes/eleicoes2026/buweb/</code> e conferidos pelo hash SHA-512 publicado pelo TSE. Os dados limpos e o código que os processa estão no projeto <a href="index.html">Para onde foram os votos</a>, onde cada número desta análise pode ser conferido por UF, município e seção.</p>
+  <p><strong>Definições:</strong> percentuais "dos válidos" excluem brancos e nulos; no 2º turno, válidos = Lula + Flávio. Horários convertidos para a hora de Brasília pela UF (e, no Amazonas, pelo município); no exterior fica a hora local. "Mais de 90%" é estritamente maior que 90%. Correlações são de Pearson, seção a seção.</p>
+  <p>Esta análise não constitui laudo judicial e não avalia questões jurídicas como a validade de uma prorrogação de horário. Ela confere apenas o que os boletins de urna permitem conferir.</p>
+</footer>
+
+</main>
+</body>
+</html>
