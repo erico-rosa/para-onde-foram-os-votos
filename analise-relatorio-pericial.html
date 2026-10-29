@@ -81,7 +81,7 @@
   <tr><th>Afirmação do relatório</th><th>Veredito</th><th>Em uma frase</th></tr>
   <tr><td>Os dados ficaram 72 horas em sigilo</td><td><span class="tag t-bad">Não se sustenta</span></td><td>Os arquivos do 2º turno estão no servidor do TSE desde segunda, 26/10, às 9h de Brasília.</td></tr>
   <tr><td>Até as 17h, Flávio venceu com 52,39%</td><td><span class="tag t-bad">Erro de método</span></td><td>O número só sai usando a hora local; em hora de Brasília são 50,99%, e o mesmo padrão já existia no 1º turno.</td></tr>
-  <tr><td>A virada veio só das urnas encerradas depois das 17h</td><td><span class="tag t-bad">Não se sustenta</span></td><td>Lula cresceu praticamente o mesmo nas urnas que fecharam antes (+2,7 p.p.) e depois (+2,8 p.p.) das 17h.</td></tr>
+  <tr><td>A virada veio só das urnas encerradas depois das 17h</td><td><span class="tag t-bad">Não se sustenta</span></td><td>Lula cresceu praticamente o mesmo nas urnas que fecharam antes (+2,7 p.p.) e depois (+2,8 p.p.) das 17h; nas 98% que fecharam antes das 17h20, teve 51,72%, quase o resultado final.</td></tr>
   <tr><td>2,5 milhões votaram fora do horário</td><td><span class="tag t-warn">Confunde conceitos</span></td><td>São eleitores de urnas que fecharam tarde, não votos dados depois das 17h; o BU não registra a hora de cada voto.</td></tr>
   <tr><td>Seções após 19h tiveram votação "avassaladora" para Lula</td><td><span class="tag t-warn">Seleção de casos</span></td><td>Essas seções já votavam assim no 1º turno, e o RJ, estado com mais seções após 19h, deu maioria a Flávio.</td></tr>
   <tr><td>8,6 milhões sem biometria, o dobro da margem</td><td><span class="tag t-warn">Confere, mas não prova</span></td><td>O número está certo, mas o 1º turno teve 8,3 milhões e a variação da biometria não tem relação com a variação do voto.</td></tr>
@@ -153,6 +153,27 @@
   <p>As seções que fecharam depois das 17h já eram mais favoráveis a Lula no 1º turno, e o crescimento dele entre os turnos foi praticamente igual nos dois grupos. Se a prorrogação tivesse "fabricado" votos, o crescimento seria muito maior nas urnas que fecharam tarde. Não é.</p>
   <p>O próprio 1º turno mostra a mesma "duas eleições". Separando pela hora de encerramento daquele dia, Flávio teve 54,16% dos válidos nas urnas fechadas até as 17h00 e 46,42% nas fechadas depois. E fechar depois das 17h é a regra, não a exceção: isso aconteceu com 91,5% das urnas no 1º turno e 74,8% no 2º. Quem está na fila às 17h tem direito de votar, e a urna só é encerrada depois do último eleitor.</p>
   <p>Dentro de cada região a diferença quase some. No Nordeste, Lula teve 70,0% nas urnas fechadas até as 17h00 e 69,2% nas fechadas depois. O contraste nacional vem principalmente de quais lugares têm mais filas, e não do horário em si.</p>
+
+  <h3>E se o limite for 17h20?</h3>
+  <p>O corte nas 17h00 é arbitrário. Nenhuma urna encerra antes das 17h de Brasília, e encerrar a urna leva alguns minutos depois do último eleitor. No 2º turno, as urnas se distribuíram assim:</p>
+  <div class="tabela"><table>
+    <tr><th>Encerramento no 2º turno (hora de Brasília)</th><th class="n">Seções</th><th class="n">% das seções</th></tr>
+    <tr><td>Antes das 17h00</td><td class="n">0</td><td class="n">0%</td></tr>
+    <tr><td>17:00:00 a 17:00:59</td><td class="n">125.653</td><td class="n">25,2%</td></tr>
+    <tr><td>17:01 a 17:04:59</td><td class="n">315.357</td><td class="n">63,2%</td></tr>
+    <tr><td>17:05 a 17:19:59</td><td class="n">49.918</td><td class="n">10,0%</td></tr>
+    <tr><td>A partir das 17h20</td><td class="n">8.250</td><td class="n">1,7%</td></tr>
+  </table></div>
+  <p>Quase nove em cada dez urnas fecharam nos primeiros cinco minutos depois das 17h, o tempo normal de encerramento. Chamar essas urnas de "prorrogação" põe 63% do país do lado "suspeito". Tomando 17h20 como limite de um fechamento normal, o resultado já é o nacional:</p>
+  <div class="tabela"><table>
+    <tr><th>Urnas do 2º turno (hora de Brasília)</th><th class="n">Seções</th><th class="n">Lula</th><th class="n">Flávio</th><th class="n">Margem</th></tr>
+    <tr class="destaque"><td>Encerradas antes das 17h20</td><td class="n">490.928</td><td class="n">51,72%</td><td class="n">48,28%</td><td class="n">Lula +4.178.428</td></tr>
+    <tr><td>Encerradas a partir das 17h20</td><td class="n">8.250</td><td class="n">55,48%</td><td class="n">44,52%</td><td class="n">Lula +251.671</td></tr>
+    <tr><td>Todas (com horário informado)</td><td class="n">499.178</td><td class="n">51,79%</td><td class="n">48,21%</td><td class="n">Lula +4.430.099</td></tr>
+  </table></div>
+  <p class="nota">Percentuais dos votos válidos. Com a hora local, o resultado é praticamente o mesmo (antes das 17h20: 51,72% para Lula, margem de 4.178.058).</p>
+  <p>Nas 98% das urnas que fecharam em horário normal, Lula teve 51,72%, a um décimo do resultado final (51,79%). Mesmo descartando todas as urnas que fecharam a partir das 17h20, ele venceria por 4,18 milhões de votos. As urnas que fecharam mais tarde não decidiram a eleição.</p>
+  <p>No 1º turno, que não teve prorrogação, 111.206 urnas (22%) fecharam a partir das 17h20, contra 8.250 no 2º turno. Ou seja, o 2º turno teve muito menos urnas tardias, não mais.</p>
 </div>
 
 <!-- ================================================================== -->
@@ -304,7 +325,7 @@
 <div class="analise">
   <ul>
     <li><span class="tag t-bad">Não se sustenta</span> <strong>Não existe uma "eleição regulamentar até as 17h00".</strong> Separar urnas pela hora em que fecharam não separa votos dados antes e depois das 17h. E, com a hora certa, a vantagem de Flávio nesse grupo cai de 1,8 milhão para 606 mil votos. O mesmo padrão aparece no 1º turno, que não teve prorrogação.</li>
-    <li><span class="tag t-bad">Não se sustenta</span> <strong>A "virada" não ficou concentrada nas urnas tardias.</strong> Lula cresceu +2,7 p.p. nas urnas fechadas até as 17h00 e +2,8 p.p. nas fechadas depois. É o mesmo crescimento.</li>
+    <li><span class="tag t-bad">Não se sustenta</span> <strong>A "virada" não ficou concentrada nas urnas tardias.</strong> Lula cresceu +2,7 p.p. nas urnas fechadas até as 17h00 e +2,8 p.p. nas fechadas depois. É o mesmo crescimento. E nas 490.928 urnas que fecharam antes das 17h20 (98% do total), ele venceu com 51,72% e 4,18 milhões de votos de vantagem.</li>
     <li><span class="tag t-warn">Confere, mas não prova</span> <strong>8,6 milhões sem habilitação biométrica</strong> é um número correto, mas igual ao do 1º turno em proporção (6,66% contra 6,73%), e a variação dele entre os turnos não tem relação com a variação do voto (r = 0,0007).</li>
     <li><span class="tag t-warn">Seleção de casos</span> <strong>As urnas que fecharam depois das 19h</strong> somam 1,9 milhão de eleitores, a maioria em capitais (São Paulo, Rio, Salvador, Recife). Deram 55% a Lula no total, com o RJ dando maioria a Flávio. E votaram como já votavam no 1º turno.</li>
     <li><span class="tag t-bad">Não se sustenta</span> <strong>Os dados não ficaram 72 horas em sigilo:</strong> estão no servidor do TSE desde a manhã de segunda-feira, embora a página do portal não os liste.</li>
