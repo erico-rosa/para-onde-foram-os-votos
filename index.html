@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para onde foram os votos</title>
+<style>
+  :root {
+    --color-fg: #1d1f22; --color-fg-muted: #5f646b; --color-bg: #f6f6f4; --color-panel: #ffffff;
+    --color-border-line: #e2e2de; --color-ok: #1f7a4a; --color-bad: #c0392b; --color-accent: #2f5d8a;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --fs-caption: .8125rem; --fs-body: .9375rem; --fs-heading: 1.0625rem; --fs-title: 1.75rem;
+    --gap-xs: .25rem; --gap-sm: .5rem; --gap-md: 1rem; --gap-lg: 1.5rem;
+    --pad-xs: .25rem; --pad-sm: .5rem; --pad-lg: 1.25rem;
+    --radius: 8px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-fg: #e8e8e6; --color-fg-muted: #a3a6ab; --color-bg: #18191b; --color-panel: #222326;
+      --color-border-line: #36383c; --color-ok: #5cc98a; --color-bad: #f07167; --color-accent: #7fb0e0;
+      color-scheme: dark;
+    }
+  }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: var(--fs-body)/1.5 var(--font-sans); }
+  .ar { padding-block: 2rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: var(--gap-lg); }
+  .ar-head h1 { font-family: var(--font-serif); font-weight: 400; font-size: var(--fs-title); margin: 0; text-wrap: balance; }
+  .ar-head p { margin: var(--gap-xs) 0 0; color: var(--color-fg-muted); max-width: 70ch; }
+  .ar-head b { font-weight: 600; color: var(--color-fg); }
+  .trilha { display: flex; flex-wrap: wrap; gap: var(--gap-xs); align-items: center; margin: 0 0 var(--gap-xs); padding: 0; list-style: none; font-size: var(--fs-caption); color: var(--color-fg-muted); }
+  .trilha li + li::before { content: "›"; margin-right: var(--gap-xs); }
+  .trilha button { font: inherit; color: var(--color-accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .trilha [aria-current] { color: var(--color-fg); font-weight: 550; }
+  .ar-tiles { display: grid; gap: var(--gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .tile, .ar-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--radius); padding: var(--pad-lg); }
+  .tile { display: grid; gap: var(--gap-sm); }
+  .tile h2, .ar-card h2 { margin: 0; font-size: var(--fs-heading); font-weight: 550; }
+  .tile dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: var(--gap-xs) var(--gap-md); align-items: baseline; }
+  .tile dt { color: var(--color-fg-muted); font-size: var(--fs-caption); }
+  .tile dd { margin: 0; font-family: var(--font-serif); font-size: var(--fs-title); font-variant-numeric: tabular-nums; }
+  .ar-card { display: grid; gap: var(--gap-md); min-width: 0; }
+  .note { margin: 0; color: var(--color-fg-muted); font-size: var(--fs-caption); }
+  .ar-tools { display: flex; flex-wrap: wrap; gap: var(--gap-sm); align-items: end; }
+  .ar-tools label { display: grid; gap: 2px; font-size: var(--fs-caption); color: var(--color-fg-muted); }
+  .ar-tools input, .ar-tools select { font: inherit; color: var(--color-fg); padding: var(--pad-xs) var(--pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--radius); background: var(--color-bg); min-width: 0; width: min(100%, 18rem); }
+  .ar-tools select:disabled { opacity: .5; }
+  .ar-box { max-height: 70vh; overflow: auto; border: 1px solid var(--color-border-line); border-radius: var(--radius); }
+  .ar-table { border-collapse: separate; border-spacing: 0; font-size: var(--fs-caption); font-variant-numeric: tabular-nums; }
+  .ar-table th, .ar-table td { padding: var(--pad-xs) var(--pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; text-align: right; background: var(--color-panel); }
+  .ar-table thead th { position: sticky; top: 0; z-index: 2; height: 2.25rem; box-sizing: border-box; font-weight: 550; }
+  .ar-table thead tr + tr th { top: 2.25rem; color: var(--color-fg-muted); font-weight: 400; }
+  .ar-table th.grp { text-align: center; border-left: 1px solid var(--color-border-line); }
+  .ar-table .t1 { border-left: 1px solid var(--color-border-line); }
+  .ar-table .txt { text-align: left; }
+  .ar-table .c0 { position: sticky; left: 0; z-index: 1; text-align: left; }
+  .ar-table.sec .c0 { width: 3.5rem; min-width: 3.5rem; box-sizing: border-box; }
+  .ar-table.sec .c1 { position: sticky; left: 3.5rem; z-index: 1; text-align: left; }
+  .ar-table thead .c0, .ar-table thead .c1 { z-index: 3; }
+  .ar-table td.link { color: var(--color-accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .ar-table th.sort { cursor: pointer; user-select: none; }
+  .ar-table th.sort:hover { color: var(--color-fg); }
+  .ar-table th[aria-sort=ascending]::after { content: " ↑"; }
+  .ar-table th[aria-sort=descending]::after { content: " ↓"; }
+  .ar-table tr.total td { font-weight: 600; border-bottom-width: 2px; }
+  .ar-table tr:focus-within, .ar-table tr:focus-within td{background: #ffffff11;}
+  .up::after, .down::after, .eq::after { margin-left: .35em; font-size: .8em; font-family: var(--font-sans); }
+  .up::after { content: "▲ (" attr(data-var) ")"; color: var(--color-ok); }
+  .down::after { content: "▼ (" attr(data-var) ")"; color: var(--color-bad); }
+  .eq::after { content: "= (0)"; color: var(--color-fg-muted); }
+  .inv.up::after { color: var(--color-bad); }
+  .inv.down::after { color: var(--color-ok); }
+  .ar-more { justify-self: start; font: inherit; color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--radius); padding: var(--pad-xs) var(--pad-sm); cursor: pointer; }
+  button:focus-visible, select:focus-visible, input:focus-visible, td.link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+  .ar-loader { display: flex; align-items: center; justify-content: center; gap: var(--gap-md); min-height: 14rem; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--radius); color: var(--color-fg-muted); }
+  .ar-loader .spin { width: 1.75rem; height: 1.75rem; border-radius: 50%; border: 3px solid var(--color-border-line); border-top-color: var(--color-accent); animation: girar .8s linear infinite; }
+  .ar-loader p { margin: 0; display: grid; gap: 2px; }
+  .ar-loader b { color: var(--color-fg); font-weight: 550; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .ar-loader .spin { animation-duration: 2.4s; } }
+  .erro { color: var(--color-bad); }
+</style>
+</head>
+<body>
+<div class="ar">
+  <header class="ar-head">
+    <ol class="trilha" id="trilha" aria-label="Onde você está"></ol>
+    <h1 id="titulo">Para onde foram os votos</h1>
+    <p id="resumo">Votos para presidente em 2026, do Brasil inteiro até cada seção eleitoral, nos dois turnos. Carregando os dados…</p>
+  </header>
+
+  <section class="ar-loader" id="loader" role="status" aria-live="polite">
+    <span class="spin" aria-hidden="true"></span>
+    <p><b id="loader-etapa">Carregando os totais do Brasil…</b><span id="loader-sub">Totais de todos os municípios, por turno.</span></p>
+  </section>
+
+  <section class="ar-card" id="carga" hidden>
+    <h2>Dados não encontrados</h2>
+    <p class="note" id="carga-msg">A pasta <code>dados/</code> não foi encontrada ao lado desta página. Ela é gerada a partir dos CSVs de <code>csv/</code> com <code>python gerar_dados.py</code>.</p>
+  </section>
+
+  <section class="ar-tiles" id="totais" hidden aria-label="Totais">
+    <div class="tile"><h2>Aptos a votar</h2><dl><dt>1º turno</dt><dd data-f="aptos_1t">—</dd><dt>2º turno</dt><dd data-f="aptos_2t">—</dd></dl></div>
+    <div class="tile"><h2>Comparecimento</h2><dl><dt>1º turno</dt><dd data-f="comp_1t">—</dd><dt>2º turno</dt><dd data-f="comp_2t">—</dd></dl></div>
+    <div class="tile"><h2>Abstenções</h2><dl><dt>1º turno</dt><dd data-f="abst_1t">—</dd><dt>2º turno</dt><dd data-f="abst_2t">—</dd></dl></div>
+  </section>
+
+  <section class="ar-card" id="tabela-card" hidden>
+    <h2 id="tabela-titulo">Votos por UF</h2>
+    <p class="note">Em cada candidato ou opção, 1T é o 1º turno e 2T o 2º turno. A seta mostra se o número subiu (▲) ou caiu (▼) do 1º para o 2º turno, com a variação entre parênteses. Em abstenções, alta aparece em vermelho. Clique num cabeçalho para ordenar e num nome para descer um nível.</p>
+    <div class="ar-tools">
+      <label>UF<select id="sel-uf"><option value="">Brasil (por UF)</option></select></label>
+      <label>Município<select id="sel-mun" disabled><option value="">Escolha uma UF</option></select></label>
+      <label>Filtrar<input id="busca" type="search" placeholder="Nome da UF"></label>
+    </div>
+    <section class="ar-loader" id="loader-uf" role="status" aria-live="polite" hidden>
+      <span class="spin" aria-hidden="true"></span>
+      <p><b id="loader-uf-etapa">Carregando as seções…</b><span>Só na primeira vez que você abre um município desta UF.</span></p>
+    </section>
+    <div class="ar-box" id="caixa"><table class="ar-table" id="tabela"></table></div>
+    <button class="ar-more" id="mais" type="button" hidden>Mostrar mais</button>
+  </section>
+</div>
+
+<script>
+(() => {
+  const UFS = {AC: 'Acre', AL: 'Alagoas', AM: 'Amazonas', AP: 'Amapá', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal', ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MG: 'Minas Gerais', MS: 'Mato Grosso do Sul', MT: 'Mato Grosso', PA: 'Pará', PB: 'Paraíba', PE: 'Pernambuco', PI: 'Piauí', PR: 'Paraná', RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RO: 'Rondônia', RR: 'Roraima', RS: 'Rio Grande do Sul', SC: 'Santa Catarina', SE: 'Sergipe', SP: 'São Paulo', TO: 'Tocantins', ZZ: 'Exterior'};
+  const PASSO = 500;
+  const $ = (id) => document.getElementById(id);
+  const fmtN = (v) => Number(v).toLocaleString('pt-BR');
+  const fmtVar = (v) => (v > 0 ? '+' : '') + fmtN(v);
+  const nomeUF = (uf) => UFS[uf] || uf;
+  const depois = (fn) => setTimeout(fn, 40);
+  const st = {uf: '', mun: '', sort: null, dir: 1, busca: '', limite: PASSO};
+  let D = null;
+  const secoesUF = {};
+
+  // Carrega um arquivo de dados por <script src>, que funciona com a página aberta do disco
+  const carregarScript = (src) => new Promise((ok, falha) => {
+    const s = document.createElement('script');
+    s.src = src; s.charset = 'utf-8';
+    s.onload = ok; s.onerror = () => falha(new Error('não encontrei ' + src));
+    document.body.appendChild(s);
+  });
+
+  // Totais do país e colunas: candidatos dos dois turnos (pelo 2º), Branco, Nulo, só 1º turno
+  function montarBrasil(B) {
+    const tot1 = {}, tot2 = {};
+    for (const u of B.ufs) for (const m of u.mun) {
+      if (m.v1) m.v1.forEach((v, i) => { tot1[B.c1[i]] = (tot1[B.c1[i]] || 0) + v; });
+      if (m.v2) m.v2.forEach((v, i) => { tot2[B.c2[i]] = (tot2[B.c2[i]] || 0) + v; });
+    }
+    const fim = (k) => (k === 'Branco' ? 1 : k === 'Nulo' ? 2 : k in tot2 ? 0 : 3);
+    const nomes = [...new Set([...B.c1, ...B.c2])]
+      .sort((x, y) => fim(x) - fim(y) || (tot2[y] || 0) - (tot2[x] || 0) || (tot1[y] || 0) - (tot1[x] || 0));
+    const numCols = [];
+    const grupos = [
+      {rot: 'Aptos', cols: ['aptos_1t', 'aptos_2t']},
+      {rot: 'Comparecimento', cols: ['comp_1t', 'comp_2t']},
+      {rot: 'Abstenções', cols: ['abst_1t', 'abst_2t'], inv: true},
+    ];
+    for (const g of grupos) numCols.push(...g.cols);
+    for (const n of nomes) {
+      const cols = [];
+      if (n in tot1) cols.push(n + ' (1T)');
+      if (n in tot2) cols.push(n + ' (2T)');
+      numCols.push(...cols);
+      grupos.push({rot: n, cols});
+    }
+    const comTurnos = (r, t1, t2, v1, v2, c1, c2) => {
+      ['aptos', 'comp', 'abst'].forEach((k, i) => { r[k + '_1t'] = t1 ? t1[i] : null; r[k + '_2t'] = t2 ? t2[i] : null; });
+      for (const n of nomes) {
+        if (n in tot1) r[n + ' (1T)'] = v1 ? v1[c1.get(n)] || 0 : null;
+        if (n in tot2) r[n + ' (2T)'] = v2 ? v2[c2.get(n)] || 0 : null;
+      }
+      return r;
+    };
+    const somar = (rows, base) => {
+      const t = Object.assign({secoes: rows.reduce((s, r) => s + r.secoes, 0)}, base);
+      for (const c of numCols) t[c] = rows.some((r) => r[c] != null) ? rows.reduce((s, r) => s + (r[c] || 0), 0) : null;
+      return t;
+    };
+    const ix1 = new Map(B.c1.map((n, i) => [n, i])), ix2 = new Map(B.c2.map((n, i) => [n, i]));
+    const munsPorUF = new Map(), ufRows = [];
+    for (const u of B.ufs) {
+      const rows = u.mun.map((m) => comTurnos({uf: u.uf, nome: m.nome, secoes: m.secoes}, m.t1, m.t2, m.v1, m.v2, ix1, ix2))
+        .sort((x, y) => x.nome.localeCompare(y.nome, 'pt-BR'));
+      munsPorUF.set(u.uf, rows);
+      ufRows.push(somar(rows, {uf: u.uf, nome: nomeUF(u.uf), municipios: rows.length}));
+    }
+    ufRows.sort((x, y) => (x.uf === 'ZZ') - (y.uf === 'ZZ') || x.nome.localeCompare(y.nome, 'pt-BR'));
+    return {grupos, numCols, comTurnos, somar, munsPorUF, ufRows, ufTotal: new Map(ufRows.map((r) => [r.uf, r])),
+      brasil: somar(ufRows, {nome: 'Total do Brasil', municipios: ufRows.reduce((s, r) => s + r.municipios, 0)})};
+  }
+
+  // Seções de uma UF a partir de dados/<UF>.js: [mun, zona, seção, local, aptos1, comp1, abst1, aptos2, comp2, abst2, votos 1T…, votos 2T…]
+  function montarSecoes(uf) {
+    if (secoesUF[uf]) return secoesUF[uf];
+    const U = window.DADOS_UF[uf];
+    const c1 = new Map(U.c1.map((n, i) => [n, i])), c2 = new Map(U.c2.map((n, i) => [n, i]));
+    const porMun = new Map();
+    for (const s of U.s) {
+      const nome = U.mun[s[0]];
+      const t1 = s[4] == null ? null : s.slice(4, 7), t2 = s[7] == null ? null : s.slice(7, 10);
+      const v1 = t1 ? s.slice(10, 10 + U.c1.length) : null;
+      const v2 = t2 ? s.slice(10 + U.c1.length) : null;
+      const r = D.comTurnos({uf, nome, zona: s[1], secao: s[2], local: s[3], secoes: 1}, t1, t2, v1, v2, c1, c2);
+      if (!porMun.has(nome)) porMun.set(nome, []);
+      porMun.get(nome).push(r);
+    }
+    for (const rows of porMun.values()) rows.sort((x, y) => x.zona - y.zona || x.secao - y.secao);
+    delete window.DADOS_UF[uf];
+    return (secoesUF[uf] = porMun);
+  }
+
+  function seta(el, a, b, inv) {
+    el.classList.remove('up', 'down', 'eq', 'inv');
+    delete el.dataset.var;
+    if (a == null || b == null) return;
+    el.classList.add(b > a ? 'up' : b < a ? 'down' : 'eq');
+    el.dataset.var = fmtVar(b - a);
+    if (inv) el.classList.add('inv');
+  }
+  const b = (txt) => Object.assign(document.createElement('b'), {textContent: txt});
+
+  function desenhar() {
+    const modo = st.mun ? 'sec' : st.uf ? 'mun' : 'uf';
+    let total, rows;
+    if (modo === 'uf') { total = D.brasil; rows = D.ufRows; }
+    else if (modo === 'mun') { total = D.ufTotal.get(st.uf); rows = D.munsPorUF.get(st.uf); }
+    else { total = D.munsPorUF.get(st.uf).find((r) => r.nome === st.mun); rows = secoesUF[st.uf].get(st.mun) || []; }
+
+    // Trilha, título e resumo
+    const trilha = $('trilha');
+    trilha.replaceChildren();
+    const passos = [['Brasil', () => irPara('', '')]];
+    if (st.uf) passos.push([nomeUF(st.uf), () => irPara(st.uf, '')]);
+    if (st.mun) passos.push([st.mun, null]);
+    passos.forEach(([rot, acao], i) => {
+      const li = document.createElement('li');
+      if (i === passos.length - 1) { const s = document.createElement('span'); s.textContent = rot; s.setAttribute('aria-current', 'page'); li.appendChild(s); }
+      else { const bt = document.createElement('button'); bt.type = 'button'; bt.textContent = rot; bt.addEventListener('click', acao); li.appendChild(bt); }
+      trilha.appendChild(li);
+    });
+    $('titulo').textContent = modo === 'uf' ? 'Para onde foram os votos' : modo === 'mun' ? nomeUF(st.uf) : st.mun + (st.uf === 'ZZ' ? ' (exterior)' : ' (' + st.uf + ')');
+    const partes = ['Votos para presidente nos dois turnos de 2026: ', b(fmtN(total.secoes)), ' seções'];
+    if (modo !== 'sec') partes.push(' em ', b(fmtN(modo === 'uf' ? total.municipios : rows.length)), st.uf === 'ZZ' ? ' cidades' : ' municípios');
+    partes.push('. O comparecimento foi de ', b(fmtN(total.comp_1t ?? 0)), ' eleitores no 1º turno e ', b(fmtN(total.comp_2t ?? 0)), ' no 2º.');
+    $('resumo').replaceChildren(...partes);
+
+    document.querySelectorAll('#totais dd').forEach((dd) => {
+      const f = dd.dataset.f;
+      dd.textContent = total[f] == null ? '—' : fmtN(total[f]);
+      seta(dd, null, null);
+      if (f.endsWith('_2t')) seta(dd, total[f.replace('_2t', '_1t')], total[f], f.startsWith('abst'));
+    });
+    $('tabela-titulo').textContent = modo === 'uf' ? 'Votos por UF' : modo === 'mun' ? 'Votos por ' + (st.uf === 'ZZ' ? 'cidade' : 'município') + ' em ' + nomeUF(st.uf) : 'Votos por seção em ' + st.mun;
+    $('busca').placeholder = modo === 'uf' ? 'Nome ou sigla da UF' : modo === 'mun' ? 'Nome do município' : 'Zona, seção ou local';
+
+    const table = $('tabela');
+    table.className = 'ar-table ' + modo;
+    table.replaceChildren();
+    const thead = table.createTHead(), h1 = thead.insertRow(), h2 = thead.insertRow();
+    const ordenavel = (th, campo, texto) => {
+      th.classList.add('sort');
+      if (st.sort === campo) th.setAttribute('aria-sort', st.dir > 0 ? 'ascending' : 'descending');
+      th.addEventListener('click', () => {
+        st.dir = st.sort === campo ? -st.dir : (texto ? 1 : -1);
+        st.sort = campo;
+        desenhar();
+      });
+    };
+    const fixas = modo === 'sec'
+      ? [['zona', 'Zona', 'c0 txt', true], ['secao', 'Seção', 'c1 txt', true], ['local', 'Local', 'txt', true]]
+      : modo === 'mun'
+        ? [['nome', st.uf === 'ZZ' ? 'Cidade' : 'Município', 'c0 txt', true], ['secoes', 'Seções', '', false]]
+        : [['nome', 'UF', 'c0 txt', true], ['municipios', 'Municípios', '', false], ['secoes', 'Seções', '', false]];
+    for (const [campo, rot, cls, texto] of fixas) {
+      const th = document.createElement('th');
+      th.rowSpan = 2; th.textContent = rot; th.className = cls;
+      ordenavel(th, campo, texto); h1.appendChild(th);
+    }
+    for (const g of D.grupos) {
+      const th = document.createElement('th');
+      th.className = 'grp'; th.colSpan = g.cols.length; th.textContent = g.rot; h1.appendChild(th);
+      g.cols.forEach((campo, i) => {
+        const s = document.createElement('th');
+        s.textContent = campo.endsWith('(2T)') || campo.endsWith('_2t') ? '2T' : '1T';
+        if (i === 0) s.classList.add('t1');
+        ordenavel(s, campo, false); h2.appendChild(s);
+      });
+    }
+
+    const q = st.busca.toLowerCase();
+    const textoBusca = (r) => (modo === 'sec' ? [r.zona, r.secao, r.local] : modo === 'uf' ? [r.nome, r.uf] : [r.nome]);
+    const lista = !q ? rows.slice() : rows.filter((r) => textoBusca(r).some((v) => String(v).toLowerCase().includes(q)));
+    if (st.sort) {
+      const c = st.sort;
+      lista.sort((x, y) => (typeof x[c] === 'string' ? x[c].localeCompare(y[c], 'pt-BR') : (x[c] ?? -Infinity) - (y[c] ?? -Infinity)) * st.dir);
+    }
+    const tbody = table.createTBody();
+    const linha = (r, ehTotal) => {
+      const tr = tbody.insertRow();
+      tr.tabIndex = "0";
+      if (ehTotal) tr.className = 'total';
+      if (modo === 'sec') {
+        const c0 = tr.insertCell(); c0.className = 'c0 txt'; c0.textContent = ehTotal ? 'Total' : r.zona;
+        const c1 = tr.insertCell(); c1.className = 'c1 txt'; c1.textContent = ehTotal ? '' : r.secao;
+        const c2 = tr.insertCell(); c2.className = 'txt'; c2.textContent = ehTotal ? '' : r.local;
+      } else {
+        const c0 = tr.insertCell(); c0.className = 'c0 txt';
+        c0.textContent = ehTotal ? (modo === 'uf' ? 'Total do Brasil' : 'Total ' + (st.uf === 'ZZ' ? 'no exterior' : 'da UF')) : r.nome;
+        if (!ehTotal) {
+          c0.classList.add('link'); c0.tabIndex = 0; c0.setAttribute('role', 'button');
+          const abrir = () => (modo === 'uf' ? irPara(r.uf, '') : irPara(st.uf, r.nome));
+          c0.addEventListener('click', abrir);
+          c0.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+        }
+        if (modo === 'uf') tr.insertCell().textContent = fmtN(r.municipios);
+        tr.insertCell().textContent = fmtN(r.secoes);
+      }
+      for (const g of D.grupos) {
+        g.cols.forEach((campo, i) => {
+          const td = tr.insertCell();
+          if (i === 0) td.className = 't1';
+          td.textContent = r[campo] == null ? '–' : fmtN(r[campo]);
+          if (i === 1) seta(td, r[g.cols[0]], r[campo], g.inv);
+        });
+      }
+    };
+    linha(total, true);
+    lista.slice(0, st.limite).forEach((r) => linha(r, false));
+    const resta = lista.length - st.limite;
+    $('mais').hidden = resta <= 0;
+    if (resta > 0) $('mais').textContent = 'Mostrar mais ' + fmtN(Math.min(PASSO, resta)) + ' (de ' + fmtN(lista.length) + ')';
+  }
+
+  function preencherMunicipios() {
+    const sel = $('sel-mun');
+    if (!st.uf) { sel.replaceChildren(new Option('Escolha uma UF', '')); sel.disabled = true; return; }
+    sel.replaceChildren(new Option('Todos (por município)', ''), ...D.munsPorUF.get(st.uf).map((r) => new Option(r.nome, r.nome)));
+    sel.disabled = false;
+    sel.value = st.mun;
+  }
+
+  let pedido = 0;
+  async function irPara(uf, mun) {
+    const meu = ++pedido;
+    st.uf = uf; st.mun = mun; st.busca = ''; st.sort = null; st.dir = 1; st.limite = PASSO;
+    $('sel-uf').value = uf; $('busca').value = '';
+    preencherMunicipios();
+    if (mun && !secoesUF[uf]) {
+      $('loader-uf-etapa').textContent = 'Carregando as seções de ' + nomeUF(uf) + '…';
+      $('loader-uf').hidden = false; $('caixa').hidden = true; $('mais').hidden = true;
+      try {
+        if (!window.DADOS_UF || !window.DADOS_UF[uf]) await carregarScript('dados/' + uf + '.js');
+        $('loader-uf-etapa').textContent = 'Organizando as seções de ' + nomeUF(uf) + '…';
+        await new Promise(depois);
+        montarSecoes(uf);
+      } catch (e) {
+        $('loader-uf-etapa').textContent = 'Não foi possível abrir dados/' + uf + '.js. Rode python gerar_dados.py.';
+        $('loader-uf-etapa').classList.add('erro');
+        return;
+      }
+      if (meu !== pedido) return;
+      $('loader-uf').hidden = true; $('caixa').hidden = false;
+    } else {
+      $('loader-uf').hidden = true; $('caixa').hidden = false;
+      $('loader-uf-etapa').classList.remove('erro');
+    }
+    desenhar();
+    $('tabela-card').scrollIntoView({block: 'start'});
+  }
+
+  $('sel-uf').addEventListener('change', (e) => irPara(e.target.value, ''));
+  $('sel-mun').addEventListener('change', (e) => irPara(st.uf, e.target.value));
+  $('busca').addEventListener('input', (e) => { st.busca = e.target.value.trim(); st.limite = PASSO; desenhar(); });
+  $('mais').addEventListener('click', () => { st.limite += PASSO; desenhar(); });
+
+  const falhar = (msg) => {
+    if (msg) $('carga-msg').textContent = msg;
+    $('loader').hidden = true;
+    $('carga').hidden = false;
+    $('resumo').textContent = 'Votos para presidente em 2026, do Brasil inteiro até cada seção eleitoral, nos dois turnos.';
+  };
+  depois(() => carregarScript('dados/brasil.js').then(() => {
+    $('loader-etapa').textContent = 'Somando UFs e municípios…';
+    depois(() => {
+      try { D = montarBrasil(window.DADOS_BRASIL); }
+      catch (e) { return falhar('Não foi possível ler dados/brasil.js: ' + e.message); }
+      $('sel-uf').replaceChildren(new Option('Brasil (por UF)', ''), ...D.ufRows.map((r) => new Option(r.nome + (r.uf === 'ZZ' ? '' : ' (' + r.uf + ')'), r.uf)));
+      $('loader').hidden = true;
+      $('totais').hidden = false;
+      $('tabela-card').hidden = false;
+      desenhar();
+    });
+  }, () => falhar()));
+})();
+</script>
+</body>
+</html>
