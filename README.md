@@ -121,6 +121,22 @@ Um único HTML, com o CSS e o JavaScript embutidos e nenhuma biblioteca externa.
 | `baixar_boletins.sh` | Baixa, confere e filtra os boletins do TSE |
 | `gerar_dados.py` | Gera `dados/` a partir de `csv/` |
 | `baixar_boletins.log` | Registro da última execução do download |
+| `og-image.png` | Imagem de compartilhamento, 1200×630 (WhatsApp, Facebook, X, LinkedIn, Telegram) |
+| `compartilhamento/imagem.html` | Fonte da imagem de compartilhamento |
+
+### Compartilhamento
+
+O `<head>` do `index.html` tem a descrição da página, as tags Open Graph (`og:*`), que WhatsApp, Facebook, LinkedIn e Telegram leem, e as tags `twitter:*`, para o X.
+
+O site está publicado no GitHub Pages, em https://erico-rosa.github.io/para-onde-foram-os-votos/. As tags `og:url`, `og:image`, `twitter:image` e o `<link rel="canonical">` usam esse endereço completo, porque WhatsApp e Facebook só mostram a imagem quando o endereço dela é **absoluto**. Se o site mudar de endereço, troque nessas quatro tags.
+
+O WhatsApp guarda a pré-visualização em cache. Se o link foi compartilhado antes de a imagem ser publicada, a pré-visualização nova pode demorar a aparecer.
+
+Os números da imagem estão escritos à mão em `compartilhamento/imagem.html`. Se os dados mudarem, edite esse arquivo e gere o PNG de novo pelo Edge em modo headless:
+
+```bash
+"/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 --screenshot="$(pwd -W)/og-image.png" "file:///$(pwd -W)/compartilhamento/imagem.html"
+```
 
 ---
 
